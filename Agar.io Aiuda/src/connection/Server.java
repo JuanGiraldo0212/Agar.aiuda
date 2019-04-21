@@ -73,6 +73,24 @@ public class Server {
 			}
 		}
 		
+		data+="&";
+		if(game.getArrFood().size()==0){
+			//System.out.println("Vacio");
+		}
+		for(int i=0;i<game.getArrFood().size();i++){
+			Ball actual=game.getArrFood().get(i);
+			double posX=actual.getPosX();
+			double posY=actual.getPosY();
+			double radius=actual.getRadius();
+			int color=actual.getColor().getRGB();
+			if(i==game.getArrFood().size()-1){
+				data+=posX+","+posY+","+radius+","+color;
+			}
+			else{
+				data+=posX+","+posY+","+radius+","+color+" ";
+			}
+		}
+		
 		return data;
 	}
 	
@@ -87,6 +105,18 @@ public class Server {
 		ball.setPosX(posX);
 		ball.setPosY(posY);
 		ball.setRadius(radius);
+		ArrayList<Ball> food=game.getArrFood();
+		if(food.size()==0){
+			//System.out.println("Vacio");
+		}
+		for(int i=0;i<food.size();i++){
+			Ball actualBall=food.get(i);
+			if(ball.eat(actualBall)){
+				food.remove(actualBall);
+				System.out.println("Come");
+			}
+		}
+		
 	}
 	
 	public void starTimer() {

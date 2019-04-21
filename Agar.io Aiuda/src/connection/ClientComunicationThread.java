@@ -24,11 +24,22 @@ public class ClientComunicationThread extends Thread{
 			DataInputStream in = new DataInputStream(client.getSocketGame().getInputStream());
 			DataOutputStream out= new DataOutputStream(client.getSocketGame().getOutputStream());
 			while(true) {
-				System.out.println("Entra al ciclo");
+				//System.out.println("Entra al ciclo");
 				String data=in.readUTF();
-				System.out.println("Entra info");
-				String[] splitData=data.split(" ");
-				client.upDateGame(splitData);
+				//System.out.println("Entra info");
+				//System.out.println(data);
+				String [] splitData=data.split("&");
+				String[] dataFood;
+				if(splitData.length>1){
+					
+					dataFood=splitData[1].split(" ");
+				}
+				else{
+					//System.out.println("Vacio papu");
+					dataFood=new String[0];
+				}
+				String[] dataPlayers=splitData[0].split(" ");
+				client.upDateGame(dataPlayers,dataFood);
 				Player player=client.getGui().getGame().getPlayer(client.getNick());
 				double posX=player.getBall().getPosX();
 				double posY=player.getBall().getPosY();

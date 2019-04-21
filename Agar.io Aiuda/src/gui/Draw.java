@@ -56,32 +56,28 @@ public class Draw extends JPanel implements MouseMotionListener{
 		g2.setColor(Color.BLACK);
 		g2.setFont(new Font("Arial", Font.PLAIN, 30));
 		g2.drawString("Puntaje: "+(int)playerBall.getRadius(), 20, 40);
+		g2.drawString(main.getClient().getNick(), (int)playerBall.getPosX(), (int)playerBall.getPosY());
 		
-		/*
-			for(int i=0;i<food.size();i++) {
-				if(playerBall.eat(playerBall.getPos(), food.get(i)))
-				{
-					try
-					{
-						main.getClient().getEatenBalls().add(food.get(i));
-						main.getClient().getGame().getArrFood().remove(food.get(i));
-					} catch (Exception e) {
-					}
-					
-				}
-				Ball actual=food.get(i);
-				g2.setColor(actual.getColor());
-				g2.fillOval((int)actual.getPosX(), (int)actual.getPosY(), (int)actual.getRadius(), (int)actual.getRadius());
-			}
-			*/
+		food=main.getGame().getArrFood();
+		for(int i=0;i<food.size();i++){
+			Ball actual=food.get(i);
+			g2.setColor(actual.getColor());
+			g2.fillOval((int)actual.getPosX(), (int)actual.getPosY(), (int)actual.getRadius(), (int)actual.getRadius());
+//			if(playerBall.eat(actual)){
+//				food.remove(actual);
+//			}
+		}	
 		
 		for (int i = 0; i < enemies.size(); i++)
 		{
-			Ball actual= enemies.get(i).getBall();
+			Player actualPlayer=enemies.get(i);
+			Ball actual= actualPlayer.getBall();
 			if(playerBall!=actual) {
 				
 				g2.setColor(actual.getColor());
 				g2.fillOval((int)actual.getPosX(), (int)actual.getPosY(), (int)actual.getRadius(), (int)actual.getRadius());
+				g2.setColor(Color.BLACK);
+				g2.drawString(actualPlayer.getNickName(), (int)actual.getPosX()+((int)actual.getRadius()/2), (int)actual.getPosY()+((int)actual.getRadius()/2));
 			}
 		}
 		//System.out.println("Se actualizó draw");

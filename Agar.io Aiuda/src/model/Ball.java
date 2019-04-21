@@ -37,14 +37,15 @@ public class Ball implements Serializable{
 		}
 	}
 	
-	public boolean eat(Vec2 actualPos,Ball other){
+	public boolean eat(Ball other){
 		boolean eat=false;
-		Vec2 actual=actualPos.sub(other.pos);
+		Vec2 actual=pos.sub(other.pos);
 		if((actual.getLength()+radius/2)<radius+other.getRadius()){
 			eat=true;
 			double sum=(Math.PI*radius*radius)+(Math.PI*other.radius*other.radius);
 			double newRadius=Math.sqrt(sum/Math.PI);
 			radius=newRadius;
+			System.out.println("Crece");
 			if(radius<=1) {
 				speed=1;
 			}

@@ -62,8 +62,8 @@ public class Client {
 	}
 	
 	
-	public void upDateGame(String[] players) {
-		gui.upDateGame(players);
+	public void upDateGame(String[] players,String[] food) {
+		gui.upDateGame(players,food);
 	}
 
 	public Socket getSocketLobby() {

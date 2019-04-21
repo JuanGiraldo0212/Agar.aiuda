@@ -103,7 +103,7 @@ public class ClientGUI extends JFrame implements ActionListener{
 		//Poner panel game
 	}
 	
-	public void upDateGame(String[] players) {
+	public void upDateGame(String[] players,String[] food) {
 		if(game==null) {
 			game=new Game();
 			ArrayList<Player> playerList=new ArrayList<Player>();
@@ -121,6 +121,20 @@ public class ClientGUI extends JFrame implements ActionListener{
 				
 			}
 			game.setPlayers(playerList);
+			ArrayList<Ball> arrFood=new ArrayList<>();
+			if(food.length==0){
+				System.out.println("Vacio");
+			}
+			for(int i=0;i<food.length;i++){
+				String[] data=food[i].split(",");
+				double posX=Double.parseDouble(data[0]);
+				double posY=Double.parseDouble(data[1]);
+				double radius=Double.parseDouble(data[2]);
+				int color=Integer.parseInt(data[3]);
+				Ball ball=new Ball(posX, posY, new Color(color), radius);
+				arrFood.add(ball);
+			}
+			game.setArrFood(arrFood);
 			draw=new Draw(this);
 			remove(lobby);
 			add(draw,BorderLayout.CENTER);
@@ -144,6 +158,32 @@ public class ClientGUI extends JFrame implements ActionListener{
 					ball.setRadius(radius);
 					ball.setColor(color);
 				}
+				else{
+					
+					double radius=Double.parseDouble(data[4]);
+					
+					Ball ball=actual.getBall();
+					ball.setRadius(radius);
+					
+				}
+			}
+			ArrayList<Ball> arrFood=game.getArrFood();
+			if(food.length==0){
+				System.out.println("Se borra");
+				game.setArrFood(new ArrayList<>());
+			}
+			for(int i=0;i<food.length;i++){
+				String[] data=food[i].split(",");
+				Ball actual=arrFood.get(i);
+				double posX=Double.parseDouble(data[0]);
+				double posY=Double.parseDouble(data[1]);
+				double radius=Double.parseDouble(data[2]);
+				int color=Integer.parseInt(data[3]);
+				actual.setColor(new Color(color));
+				actual.setPosX(posX);
+				actual.setPosY(posY);
+				actual.setRadius(radius);
+				
 			}
 		}
 		draw.repaint();
