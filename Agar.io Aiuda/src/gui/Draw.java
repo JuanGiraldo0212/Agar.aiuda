@@ -38,6 +38,7 @@ public class Draw extends JPanel implements MouseMotionListener{
 		thread.start();
 		food = main.getGame().getArrFood();
 		enemies = main.getGame().getPlayers();
+		
 	}
 	
 	@Override

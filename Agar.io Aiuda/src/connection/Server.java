@@ -1,13 +1,22 @@
 package connection;
 
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import javax.net.ssl.SSLServerSocketFactory;
 
 import model.Ball;
 import model.Game;
@@ -18,6 +27,10 @@ public class Server {
 	public final static int SERVER_PORT=8000;
 	public final static int SERVER_PORT_LOBBY=8001;
 	public final static int SERVER_PORT_GAME=8002;
+	public static final String KEYSTORE_LOCATION = "./Docs/keystore.jks";
+	public static final String KEYSTORE_PASSWORD = "viejito";
+	public static final String LOG_PATH = "./Docs/Logs.txt";
+	
 	private ServerSocket serverSocket;
 	private ServerSocket serverSocketLobby;
 	private ServerSocket serverSocketGame;
@@ -35,13 +48,18 @@ public class Server {
 	
 	public void initGameServer(int wait){
 		try {
+			System.setProperty("javax.net.ssl.keyStore", KEYSTORE_LOCATION);
+			System.setProperty("javax.net.ssl.keyStorePassword", KEYSTORE_PASSWORD);
 			game=new Game();
 			//game.generateFood();
 			userNames=new ArrayList<String>();
 			playersSockets=new ArrayList<>();
 			lobbyThreads=new ArrayList<ServerLobbyThread>();
 			serverThreads=new ArrayList<ServerCommunicationThread>();
-			serverSocket = new ServerSocket(SERVER_PORT);
+			
+			SSLServerSocketFactory ssf = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+			serverSocket = ssf.createServerSocket(SERVER_PORT);
+			
 			serverSocketLobby=new ServerSocket(SERVER_PORT_LOBBY);
 			serverSocketGame=new ServerSocket(SERVER_PORT_GAME);
 			asignationThread = new AsignationThread(this);
@@ -117,6 +135,52 @@ public class Server {
 			}
 		}
 		
+	}
+	
+	public String registerPlayer(String nickname, String email, String password) throws IOException
+	{
+		String[] datosUser = loginQuery(email, password);
+		String result = "ExistingAccountException";
+		if(datosUser[1] == null)
+		{
+			File logs = new File(LOG_PATH);
+			PrintWriter pw = new PrintWriter(new FileWriter(logs, true));
+			pw.write(email + "," + password + "," + nickname + "\n");
+			pw.flush();
+			pw.close();
+			result = "You're registered";
+		}
+		return result;
+	}
+	
+	public String[] loginQuery(String email, String password) throws IOException
+	{
+		String[] result = new String[3];
+		BufferedReader br = new BufferedReader(new FileReader(new File(LOG_PATH)));
+		String line;
+		boolean found = false;
+		while((line = br.readLine()) != null && !found)
+		{
+			String[] userData = line.split(",");
+			if(email.equals(userData[1]))
+			{
+				result[1] = userData[1];
+			}
+			if(password.equals(userData[2]))
+			{
+				result[2] = userData[2];
+			}
+			if(result[1] != null && result[2] != null)
+			{
+				result[0] = userData[0];
+			}
+			if(result[1] != null)
+			{
+				found = true;
+			}
+		}
+		br.close();
+		return result;
 	}
 	
 	public void starTimer() {

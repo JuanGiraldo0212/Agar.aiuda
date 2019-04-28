@@ -47,7 +47,7 @@ public class RegisterPane extends JPanel implements ActionListener{
 		txtPass.setPreferredSize(new Dimension(100, 20));
 		btnStart=new JButton("Start");
 		btnStart.addActionListener(this);
-		//btnStart.setEnabled(false);
+		btnStart.setEnabled(false);
 		btnStart.setActionCommand(START);
 		aux.add(lblMail);
 		aux.add(txtMail);
@@ -69,10 +69,42 @@ public class RegisterPane extends JPanel implements ActionListener{
 		String command=e.getActionCommand();
 		if(command.equals(START)) {
 			String resp=JOptionPane.showInputDialog("Ingrese la ip del servidor");
-			main.register(resp, txtNick.getText()+" "+txtMail.getText()+" "+txtPass.getText());
-			main.lobby();
+			main.startGame(resp, txtNick.getText()+" "+txtMail.getText()+" "+txtPass.getText());
 		}
 		
 	}
 
+	public JTextField getTxtNick() {
+		return txtNick;
+	}
+
+	public void setTxtNick(JTextField txtNick) {
+		this.txtNick = txtNick;
+	}
+
+	public JTextField getTxtMail() {
+		return txtMail;
+	}
+
+	public void setTxtMail(JTextField txtMail) {
+		this.txtMail = txtMail;
+	}
+
+	public JTextField getTxtPass() {
+		return txtPass;
+	}
+
+	public void setTxtPass(JTextField txtPass) {
+		this.txtPass = txtPass;
+	}
+
+	public JButton getBtnStart() {
+		return btnStart;
+	}
+
+	public void setBtnStart(JButton btnStart) {
+		this.btnStart = btnStart;
+	}
+	
+	
 }

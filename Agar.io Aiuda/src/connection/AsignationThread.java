@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.DatabaseMetaData;
 
 import model.Player;
 
@@ -29,22 +30,64 @@ public class AsignationThread extends Thread{
 					if(server.getPlayersSockets().size()==1) {
 						server.starTimer();
 					}
-					server.getPlayersSockets().add(socket);
 					System.out.println("Un cliente se ha conectado");
 					DataInputStream in =new DataInputStream(socket.getInputStream());
 					DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-					
 					String[] userData= in.readUTF().split(" ");
-					System.out.println("Se conecto: "+userData[0]);
-					server.getUserNames().add(userData[0]);
-					Player player=new Player(userData[0]);
-					server.getGame().getPlayers().add(player);
-					ServerLobbyThread lobbyThread=new ServerLobbyThread(server);
-					server.getLobbyThreads().add(lobbyThread);
-					lobbyThread.start();
-					ServerCommunicationThread serverThread= new ServerCommunicationThread(server);
-					server.getServerThreads().add(serverThread);
-					serverThread.start();
+					if(userData.length == 3)
+					{
+						String registration = server.registerPlayer(userData[0], userData[1], userData[2]);
+						if(registration.equals("ExistingAccountException"))
+						{
+							out.writeUTF("ExistingAccountException");
+							socket.close();
+						}
+						else
+						{
+							server.getPlayersSockets().add(socket);
+							System.out.println("Se conecto: "+userData[0]);
+							server.getUserNames().add(userData[0]);
+							Player player=new Player(userData[0]);
+							server.getGame().getPlayers().add(player);
+							ServerLobbyThread lobbyThread=new ServerLobbyThread(server);
+							server.getLobbyThreads().add(lobbyThread);
+							lobbyThread.start();
+							ServerCommunicationThread serverThread= new ServerCommunicationThread(server);
+							server.getServerThreads().add(serverThread);
+							serverThread.start();
+							out.writeUTF("You're conected");
+						}
+					}
+					else if(userData.length == 2)
+					{
+						String[] dataBaseInfo = server.loginQuery(userData[0], userData[1]);
+						if(dataBaseInfo[1] == null)
+						{
+							out.writeUTF("AccountNotFoundException");
+							socket.close();
+						}
+						else if(dataBaseInfo[1] != null && dataBaseInfo[2] == null)
+						{
+							out.writeUTF("WrongPasswordException");
+							socket.close();
+						}
+						else
+						{
+							server.getPlayersSockets().add(socket);
+							System.out.println("Se conecto: "+dataBaseInfo[0]);
+							server.getUserNames().add(dataBaseInfo[0]);
+							Player player=new Player(dataBaseInfo[0]);
+							server.getGame().getPlayers().add(player);
+							ServerLobbyThread lobbyThread=new ServerLobbyThread(server);
+							server.getLobbyThreads().add(lobbyThread);
+							lobbyThread.start();
+							ServerCommunicationThread serverThread= new ServerCommunicationThread(server);
+							server.getServerThreads().add(serverThread);
+							serverThread.start();
+							out.writeUTF("You're conected");
+						}
+					}
+					
 				}
 				else {
 					System.out.println("Ya no hay tiempo");

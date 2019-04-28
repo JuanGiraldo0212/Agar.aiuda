@@ -2,9 +2,16 @@ package connection;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+
+import javax.net.ssl.SSLSocketFactory;
 
 import gui.ClientGUI;
 
@@ -12,6 +19,7 @@ public class Client {
 	public final static int SERVER_PORT=8000;
 	public final static int SERVER_PORT_LOBBY=8001;
 	public final static int SERVER_PORT_GAME=8002;
+	public static final String TRUSTTORE_LOCATION = "./Docs/keystore.jks";
 	private DataInputStream in;
 	private DataOutputStream out;
 	private String serverIp;
@@ -21,22 +29,43 @@ public class Client {
 	private String nick;
 	private ClientGUI gui;
 	private ClientComunicationThread clientThread;
+	private char[] password = {'v','i','e','j','i','t', 'o'};
 	
-	public Client(String serverIp,String data,ClientGUI client){
+	public Client(String serverIp,String data,ClientGUI client) throws AccountNotFoundException, WrongPasswordException, ExistingAccountException{
 		try {
 			this.serverIp=serverIp;
 			gui=client;
-			socketConnection=new Socket(serverIp, SERVER_PORT);
+			
+			System.setProperty("javax.net.ssl.trustStore", TRUSTTORE_LOCATION);
+			SSLSocketFactory sf = (SSLSocketFactory) SSLSocketFactory.getDefault();
+			
+			KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+			keyStore.load(new FileInputStream(TRUSTTORE_LOCATION), password);
+			socketConnection = sf.createSocket(serverIp, SERVER_PORT);
+			
 			in=new DataInputStream(socketConnection.getInputStream());
 			out=new DataOutputStream(socketConnection.getOutputStream());
 			String [] userInfo=data.split(" ");
 			nick=userInfo[0];
 			out.writeUTF(data);
+			String respond = in.readUTF();
+			if(respond.equals("AccountNotFoundException"))
+			{
+				throw new AccountNotFoundException();
+			}
+			else if(respond.equals("WrongPasswordException"))
+			{
+				throw new WrongPasswordException();
+			}
+			else if(respond.equals("ExistingAccountException"))
+			{
+				throw new ExistingAccountException();
+			}
 			
-		} catch (Exception e) {
+		} catch (IOException | KeyStoreException |NoSuchAlgorithmException | CertificateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
 		
 		
 	}

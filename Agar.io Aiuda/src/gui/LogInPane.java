@@ -46,7 +46,7 @@ public class LogInPane extends JPanel implements ActionListener{
 		txtPass.setPreferredSize(new Dimension(100, 20));
 		btnStart=new JButton("Start");
 		btnStart.addActionListener(this);
-		//btnStart.setEnabled(false);
+		btnStart.setEnabled(false);
 		btnStart.setActionCommand(START);
 		aux.add(lblMail);
 		aux.add(txtMail);
@@ -76,19 +76,13 @@ public class LogInPane extends JPanel implements ActionListener{
 		}
 		return permit;
 	}
-	public void signIn(String email, String password, String nickname) throws IOException
-	{
-		File logs = new File(LOGS);
-		BufferedWriter bw = new BufferedWriter(new FileWriter(logs, true));
-		bw.write(email + "," + password + "," + nickname);
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String comando=e.getActionCommand();
 		if(comando.equals(START))
 		{
-			//main.startGame();
+			String resp=JOptionPane.showInputDialog("Ingrese la ip del servidor");
+			main.startGame(resp, txtMail.getText()+" "+txtPass.getText());
 		}
 		
 	}

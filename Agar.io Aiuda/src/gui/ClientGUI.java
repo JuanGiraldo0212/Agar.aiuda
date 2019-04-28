@@ -7,6 +7,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.print.Book;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -14,7 +16,10 @@ import java.util.Scanner;
 
 import javax.swing.*;
 
+import connection.AccountNotFoundException;
 import connection.Client;
+import connection.ExistingAccountException;
+import connection.WrongPasswordException;
 import model.Ball;
 import model.Game;
 import model.Player;
@@ -60,7 +65,6 @@ public class ClientGUI extends JFrame implements ActionListener{
 		aux.add(btnLogIn);
 		aux.add(btnRegister);
 		logIn=new LogInPane(this);
-		register=new RegisterPane(this);
 		btnRegister.addActionListener(this);
 		btnRegister.setActionCommand(REGISTER);
 		btnLogIn.addActionListener(this);
@@ -69,6 +73,7 @@ public class ClientGUI extends JFrame implements ActionListener{
 		first.add(logIn,BorderLayout.CENTER);
 		add(first);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);
 		pack();
 	}
 
@@ -83,8 +88,18 @@ public class ClientGUI extends JFrame implements ActionListener{
 		clientGUI.setVisible(true);
 	}
 	
-	public void register(String serverIp,String data) {
-		 client=new Client(serverIp, data,this);
+	public void startGame(String serverIp,String data) {
+		 try 
+		 {
+			 
+			client=new Client(serverIp, data,this);
+			lobby();
+			
+		 } catch (AccountNotFoundException | WrongPasswordException | ExistingAccountException e) {
+			 
+			JOptionPane.showConfirmDialog(this, e.getMessage(), "Excepción", JOptionPane.CANCEL_OPTION);
+
+		 }
 		
 	}
 	
@@ -193,60 +208,32 @@ public class ClientGUI extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		String comand=e.getActionCommand();
-		if(comand.equals(REGISTER)){
-			//logIn.register();
+		if(comand.equals(REGISTER))
+		{
 			first.remove(logIn);
+			
+			register = new RegisterPane(this);
+			btnRegister.setEnabled(false);
+			btnLogIn.setEnabled(true);
+			register.getBtnStart().setEnabled(true);
 			first.add(register,BorderLayout.CENTER);
 			pack();
-			
 		}
 		else if(comand.equals(LOGIN))
 		{
-			first.remove(register);
+			if(register != null)
+			{
+				first.remove(register);
+				register = null;
+			}
+			btnLogIn.setEnabled(false);
+			btnRegister.setEnabled(true);
+			logIn.getBtnStart().setEnabled(true);
 			first.add(logIn,BorderLayout.CENTER);
 			pack();
-		}
-		else if(comand.equals(SIGN_IN))
-		{
-			try
-			{
-				
-				//logIn.signIn(logIn.getTxtMail().getText(), logIn.getTxtPass().getText(), logIn.getTxtNick().getText());
-				btnRegister.setEnabled(false);
-				logIn.getBtnStart().setEnabled(true);
-				
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-		
-	}
-	/*
-	public void startGame(){
-		
-		System.out.println("se trata de crear cliente");
-		Client client = new Client(logIn.getTxtNick().getText(), logIn.getTxtMail().getText(), logIn.getTxtPass().getText());
-		while(client.getClientGetsSendsGameDataThread() == null) 
-		{
 			
 		}
-		while(!client.getClientGetsSendsGameDataThread().isGameReady())
-		{
-			
-		}
-		System.out.println("creó cliente");
-		this.client = client;
-		System.out.println("se asignó el cliente a la interfaz");
-		remove(logIn);
-		remove(aux);
-		draw=new Draw(this);
-		add(draw,BorderLayout.CENTER);
-		draw.setVisible(true);
-		setSize(ANCHO,LARGO);
-		revalidate();
 	}
-	*/
 	public Point mousePos() {
 		return draw.mousePos();
 	}
