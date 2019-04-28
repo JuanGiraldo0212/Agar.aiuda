@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import javax.net.ssl.SSLServerSocketFactory;
 
+import Audio.TransmissionThreadServer;
 import model.Ball;
 import model.Game;
 import model.Player;
@@ -41,6 +42,7 @@ public class Server {
 	private Game game;
 	private ArrayList<String> userNames;
 	private ArrayList<ServerCommunicationThread> serverThreads;
+	private TransmissionThreadServer tts;
 	
 	public Server(int wait){
 		initGameServer(wait);
@@ -65,7 +67,8 @@ public class Server {
 			asignationThread = new AsignationThread(this);
 			asignationThread.start();
 			timerThread=new TimerThread(asignationThread, wait);
-		
+			tts = new TransmissionThreadServer();
+			iniciarTransmisionAudio();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -260,7 +263,9 @@ public class Server {
 		this.serverThreads = serverThreads;
 	}
 	
-	
+	public void iniciarTransmisionAudio() {
+		tts.start();
+	}
 	
 
 }

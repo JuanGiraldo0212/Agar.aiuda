@@ -13,6 +13,7 @@ import java.security.cert.CertificateException;
 
 import javax.net.ssl.SSLSocketFactory;
 
+import Audio.ClientTransmissionThread;
 import gui.ClientGUI;
 
 public class Client {
@@ -30,12 +31,14 @@ public class Client {
 	private ClientGUI gui;
 	private ClientComunicationThread clientThread;
 	private char[] password = {'v','i','e','j','i','t', 'o'};
+	private ClientTransmissionThread ctt;
 	
 	public Client(String serverIp,String data,ClientGUI client) throws AccountNotFoundException, WrongPasswordException, ExistingAccountException{
 		try {
 			this.serverIp=serverIp;
 			gui=client;
-			
+			ctt = new ClientTransmissionThread();
+			iniciarTransmisionAudio();
 			System.setProperty("javax.net.ssl.trustStore", TRUSTTORE_LOCATION);
 			SSLSocketFactory sf = (SSLSocketFactory) SSLSocketFactory.getDefault();
 			
@@ -127,6 +130,8 @@ public class Client {
 		this.nick = nick;
 	}
 	
-	
+	public void iniciarTransmisionAudio() {
+		ctt.start();
+	}
 
 }
