@@ -131,7 +131,6 @@ public class ClienteChat extends JPanel{
         }
     }
     
-    
     /**
      * @param args the command line arguments
      */

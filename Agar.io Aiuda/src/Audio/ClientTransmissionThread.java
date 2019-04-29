@@ -37,7 +37,7 @@ public class ClientTransmissionThread extends Thread {
 					byte audioData[] = packet.getData();
 					InputStream byteInputStream = new ByteArrayInputStream(audioData);
 					AudioFormat audioFormat = new AudioFormat(8000, 16, 2, true, false);
-					
+					//AudioFormat audioFormat =getAudioFormat();
 					audioInputStream = new AudioInputStream(byteInputStream, audioFormat,
 							audioData.length / audioFormat.getFrameSize());
 					DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
@@ -75,6 +75,16 @@ public class ClientTransmissionThread extends Thread {
 			e.printStackTrace();
 		}
 	}
+	
+	private AudioFormat getAudioFormat() {
+		float sampleRate = 16000F;
+		int sampleSizeInBits = 16;
+		int channels = 1;
+		boolean signed = true;
+		boolean bigEndian = false;
+		return new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
+	}
+	
 	
 	public static void main(String[] args) {
 		ClientTransmissionThread hT = new ClientTransmissionThread();
