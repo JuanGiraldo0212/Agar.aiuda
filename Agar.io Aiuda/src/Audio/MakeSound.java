@@ -11,20 +11,38 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
-class MakeSound {
+public class MakeSound {
 
+	public static int TAMANHOMUSICA = 3;
+	public static String RUTAMUSICA = "./Musica/";
     private final int BUFFER_SIZE = 128000;
     private File soundFile;
     private AudioInputStream audioStream;
     private AudioFormat audioFormat;
     private SourceDataLine sourceLine;
+    String [] arrMusica;
 
-    /**
+    public MakeSound() {
+    	arrMusica = new String [TAMANHOMUSICA];
+    	arrMusica[0] = "Foster-the-People-Pumped-up-Kicks.wav";
+    	arrMusica[1] = "Legends Never Die.wav";
+    	arrMusica[2] = "RISE.wav";    	
+    }
+
+    public String[] getArrMusica() {
+		return arrMusica;
+	}
+
+	public void setArrMusica(String[] arrMusica) {
+		this.arrMusica = arrMusica;
+	}
+
+	/**
      * @param filename the name of the file that is going to be played
      */
     public void playSound(String filename){
 
-        String strFilename = filename;
+        String strFilename = RUTAMUSICA+filename;
 
         try {
             soundFile = new File(strFilename);
@@ -74,8 +92,17 @@ class MakeSound {
         sourceLine.close();
     }
     
+    public void detener () {
+    	sourceLine.drain();
+        sourceLine.close();
+    }
+    
+    public String buscarCancion (int i) {
+    	return arrMusica[i];
+    }
+    
     public static void main(String[] args) {
     	MakeSound m=new MakeSound();
-		m.playSound("./Musica/Foster-the-People-Pumped-up-Kicks.wav");
+		m.playSound("Foster-the-People-Pumped-up-Kicks.wav");
 	}
 }
