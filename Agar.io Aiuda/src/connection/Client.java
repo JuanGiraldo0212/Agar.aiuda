@@ -13,7 +13,7 @@ import java.security.cert.CertificateException;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import Audio.ClientTransmissionThread;
+import Audio.LocutorClientTransmissionThread;
 import gui.ClientGUI;
 
 public class Client {

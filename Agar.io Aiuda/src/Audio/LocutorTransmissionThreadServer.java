@@ -11,7 +11,7 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 
-public class TransmissionThreadServer extends Thread{
+public class LocutorTransmissionThreadServer extends Thread{
 
 	private TargetDataLine targetDataLine;
 	private final byte audioBuffer[] = new byte[10000];
@@ -58,7 +58,7 @@ public class TransmissionThreadServer extends Thread{
 	
 	
 	public static void main(String[] args) {
-		TransmissionThreadServer hT = new TransmissionThreadServer();
+		LocutorTransmissionThreadServer hT = new LocutorTransmissionThreadServer();
 		hT.start();
 	}
 }

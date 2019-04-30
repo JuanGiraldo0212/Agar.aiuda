@@ -13,7 +13,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
 
-public class ClientTransmissionThread extends Thread {
+public class LocutorClientTransmissionThread extends Thread {
 
 	AudioInputStream audioInputStream;
 	SourceDataLine sourceDataLine;
@@ -86,7 +86,7 @@ public class ClientTransmissionThread extends Thread {
 	
 	
 	public static void main(String[] args) {
-		ClientTransmissionThread hT = new ClientTransmissionThread();
+		LocutorClientTransmissionThread hT = new LocutorClientTransmissionThread();
 		hT.start();
 	}
 	
