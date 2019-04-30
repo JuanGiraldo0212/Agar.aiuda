@@ -7,7 +7,7 @@ import java.io.*;
 import java.net.*;
 import javax.sound.sampled.*;
 
-public class VUClient {
+public class VUClient extends JFrame {
 
 boolean stopaudioCapture = false;
 ByteArrayOutputStream byteOutputStream;
@@ -15,13 +15,58 @@ AudioFormat adFormat;
 TargetDataLine targetDataLine;
 AudioInputStream InputStream;
 SourceDataLine sourceLine;
+Graphics g;
 
 public static void main(String args[]) {
-    VUClient vuc = new VUClient();
-    vuc.playAudio();
+    new VUClient();
 }
 
 public VUClient() {
+    final JButton capture = new JButton("Capture");
+    final JButton stop = new JButton("Stop");
+    final JButton play = new JButton("Playback");
+
+    capture.setEnabled(true);
+    stop.setEnabled(false);
+    play.setEnabled(false);
+
+    capture.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            capture.setEnabled(false);
+            stop.setEnabled(true);
+            play.setEnabled(false);
+            captureAudio();
+        }
+    });
+    getContentPane().add(capture);
+
+    stop.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            capture.setEnabled(true);
+            stop.setEnabled(false);
+            play.setEnabled(true);
+            stopaudioCapture = true;
+            targetDataLine.close();
+        }
+    });
+    getContentPane().add(stop);
+
+    play.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            playAudio();
+        }
+    });
+    getContentPane().add(play);
+
+    getContentPane().setLayout(new FlowLayout());
+    setTitle("Capture/Playback Demo");
+    setDefaultCloseOperation(EXIT_ON_CLOSE);
+    setSize(400, 100);
+    getContentPane().setBackground(Color.white);
+    setVisible(true);
+
+    g = (Graphics) this.getGraphics();
 }
 
 private void captureAudio() {
@@ -46,7 +91,7 @@ private void captureAudio() {
 private void playAudio() {
     try {
         byte audioData[] = byteOutputStream.toByteArray();
-        InputStream byteInputStream = new ByteArrayInputStream(audioData);        
+        InputStream byteInputStream = new ByteArrayInputStream(audioData);
         AudioFormat adFormat = getAudioFormat();
         InputStream = new AudioInputStream(byteInputStream, adFormat, audioData.length / adFormat.getFrameSize());
         DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, adFormat);
@@ -62,9 +107,9 @@ private void playAudio() {
 }
 
 private AudioFormat getAudioFormat() {
-    float sampleRate = 44100.0F;
+    float sampleRate = 16000.0F;
     int sampleInbits = 16;
-    int channels = 2;
+    int channels = 1;
     boolean signed = true;
     boolean bigEndian = false;
     return new AudioFormat(sampleRate, sampleInbits, channels, signed, bigEndian);
