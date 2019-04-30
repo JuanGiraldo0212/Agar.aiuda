@@ -38,8 +38,7 @@ public class ClientTransmissionThread extends Thread {
 					InputStream byteInputStream = new ByteArrayInputStream(audioData);
 					AudioFormat audioFormat = new AudioFormat(8000, 16, 2, true, false);
 					//AudioFormat audioFormat =getAudioFormat();
-					audioInputStream = new AudioInputStream(byteInputStream, audioFormat,
-							audioData.length / audioFormat.getFrameSize());
+					audioInputStream = new AudioInputStream(byteInputStream, audioFormat,audioData.length / audioFormat.getFrameSize());
 					DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
 					sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
 					sourceDataLine.open(audioFormat);
