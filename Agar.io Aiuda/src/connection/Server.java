@@ -16,11 +16,14 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.rmi.server.ServerNotActiveException;
 import java.util.ArrayList;
 
 import javax.net.ssl.SSLServerSocketFactory;
 
+import Audio.CancionServer;
 import Audio.LocutorTransmissionThreadServer;
+import Audio.servidorAudioFinal;
 import AudioViejito.HiloAudioUDPServer;
 import model.Ball;
 import model.Game;
@@ -47,14 +50,15 @@ public class Server {
 	private AsignationThread asignationThread;
 	private ArrayList<ServerLobbyThread> lobbyThreads;
 	private TimerThread timerThread;
-	private HiloAudioUDPServer musicThread;
+	private servidorAudioFinal musicThread;
 	private Game game;
 	private ArrayList<String> userNames;
 	private ArrayList<ServerCommunicationThread> serverThreads;
 	
 	public Server(int wait){
 		//initGameServer(wait);
-		musicThread = new HiloAudioUDPServer(this);
+		musicThread = new servidorAudioFinal(this);
+		musicThread.start();
 	}
 	
 	public void initGameServer(int wait){
@@ -279,13 +283,5 @@ public class Server {
 		this.serverSocketMusic = serverSocketMusic;
 	}
 
-	public HiloAudioUDPServer getMusicThread() {
-		return musicThread;
-	}
-
-	public void setMusicThread(HiloAudioUDPServer musicThread) {
-		this.musicThread = musicThread;
-	}
-	
 
 }
