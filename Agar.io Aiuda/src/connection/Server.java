@@ -20,8 +20,10 @@ import java.util.ArrayList;
 
 import javax.net.ssl.SSLServerSocketFactory;
 
-import Audio.LocutorTransmissionThreadServer;
-import AudioViejito.HiloAudioUDPServer;
+import Audio.CancionServer;
+import Audio.servidorAudioFinal;
+//import Audio.LocutorTransmissionThreadServer;
+//import AudioViejito.HiloAudioUDPServer;
 import model.Ball;
 import model.Game;
 import model.Player;
@@ -33,11 +35,7 @@ public class Server {
 	public final static int SERVER_PORT_GAME=8002;
 	public static final String KEYSTORE_LOCATION = "./Docs/keystore.jks";
 	public static final String KEYSTORE_PASSWORD = "viejito";
-	public static final String LOG_PATH = "./Docs/Logs.txt";
-	public static final String MUSIC_PATH = "./Docs/Yoshi.wav";
-	public static final String MULTICAST_IP = "localhost";
-	public static final int MUSIC_PORT = 8001;
-	
+	public static final String LOG_PATH = "./Docs/Logs.txt";	
 	
 	private ServerSocket serverSocket;
 	private ServerSocket serverSocketLobby;
@@ -47,14 +45,15 @@ public class Server {
 	private AsignationThread asignationThread;
 	private ArrayList<ServerLobbyThread> lobbyThreads;
 	private TimerThread timerThread;
-	private HiloAudioUDPServer musicThread;
+	//private HiloAudioUDPServer musicThread;
 	private Game game;
 	private ArrayList<String> userNames;
 	private ArrayList<ServerCommunicationThread> serverThreads;
+	private CancionServer cancionservidor;
 	
 	public Server(int wait){
-		//initGameServer(wait);
-		musicThread = new HiloAudioUDPServer(this);
+		initGameServer(wait);
+		//musicThread = new HiloAudioUDPServer(this);
 	}
 	
 	public void initGameServer(int wait){
@@ -74,6 +73,15 @@ public class Server {
 			serverSocketLobby=new ServerSocket(SERVER_PORT_LOBBY);
 			serverSocketGame=new ServerSocket(SERVER_PORT_GAME);
 			asignationThread = new AsignationThread(this);
+			
+			//TODO
+			//Locutor
+			//servidorAudioFinal audioServer = new servidorAudioFinal();
+			//audioServer.start();
+			
+			cancionservidor = new CancionServer();
+			cancionservidor.start();
+			
 			asignationThread.start();
 			timerThread=new TimerThread(asignationThread, wait);
 			
@@ -82,6 +90,8 @@ public class Server {
 			e.printStackTrace();
 		}
 	}
+	
+	
 	
 	public String getInfoGame() {
 		String data="";
@@ -278,7 +288,7 @@ public class Server {
 	public void setServerSocketMusic(MulticastSocket serverSocketMusic) {
 		this.serverSocketMusic = serverSocketMusic;
 	}
-
+/*
 	public HiloAudioUDPServer getMusicThread() {
 		return musicThread;
 	}
@@ -286,6 +296,6 @@ public class Server {
 	public void setMusicThread(HiloAudioUDPServer musicThread) {
 		this.musicThread = musicThread;
 	}
-	
+*/	
 
 }
