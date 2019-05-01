@@ -20,8 +20,9 @@ import java.util.ArrayList;
 
 import javax.net.ssl.SSLServerSocketFactory;
 
-import Audio.CancionServer;
-import Audio.servidorAudioFinal;
+//import Audio.CancionServer;
+
+//import Audio.servidorAudioFinal;
 //import Audio.LocutorTransmissionThreadServer;
 //import AudioViejito.HiloAudioUDPServer;
 import model.Ball;
@@ -49,7 +50,7 @@ public class Server {
 	private Game game;
 	private ArrayList<String> userNames;
 	private ArrayList<ServerCommunicationThread> serverThreads;
-	private CancionServer cancionservidor;
+//	private CancionServer cancionservidor;
 	
 	public Server(int wait){
 		initGameServer(wait);
@@ -78,10 +79,10 @@ public class Server {
 			//Locutor
 			//servidorAudioFinal audioServer = new servidorAudioFinal();
 			//audioServer.start();
-			
+		/*	
 			cancionservidor = new CancionServer();
 			cancionservidor.start();
-			
+		*/	
 			asignationThread.start();
 			timerThread=new TimerThread(asignationThread, wait);
 			
