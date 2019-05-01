@@ -3,8 +3,6 @@ package Audio;
 import java.io.*;
 import java.net.*;
 import javax.sound.sampled.*;
-import java.io.File;
-import java.nio.file.Files;
 
 public class VUServer {
 
@@ -36,10 +34,7 @@ public void runVOIP() {
             serverSocket.receive(receivePacket);
             System.out.println("RECEIVED: " + receivePacket.getAddress().getHostAddress() + " " + receivePacket.getPort());
             try {
-            	File file = new File("./Musica/Foster-the-People-Pumped-up-Kicks.wav");
-            	byte[] fileContent = Files.readAllBytes(file.toPath());
-            	
-                byte audioData[] = fileContent;
+                byte audioData[] = receivePacket.getData();
                 InputStream byteInputStream = new ByteArrayInputStream(audioData);
                 AudioFormat adFormat = getAudioFormat();
                 InputStream = new AudioInputStream(byteInputStream, adFormat, audioData.length / adFormat.getFrameSize());

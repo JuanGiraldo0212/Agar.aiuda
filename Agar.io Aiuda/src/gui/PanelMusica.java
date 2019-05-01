@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 import Audio.MakeSound;
 
-public class Musica extends JPanel implements ActionListener{
+public class PanelMusica extends JPanel implements ActionListener{
 
 	public static String BACK ="anterior";
 	public static String STOP ="pausa";
@@ -25,12 +25,11 @@ public class Musica extends JPanel implements ActionListener{
 	JButton btnEmpezar;
 	
 	int laCancion;
-	MakeSound MS;
 	
-	public Musica () {
-		MS = new MakeSound();
+	public PanelMusica () {
 		setLayout(new GridLayout(2,1));
-		jcCanciones = new JComboBox<String>(MS.getArrMusica());
+		//necesita que se cargen las canciones al comboBox
+		jcCanciones = new JComboBox<String>();
 		btnAnterior = new JButton("<<");
 		btnSiguiente = new JButton(">>");
 		btnPausar = new JButton("||");
@@ -71,23 +70,20 @@ public class Musica extends JPanel implements ActionListener{
 		String ev = evento.getActionCommand();
 		//TODO
 		if(ev.equals(BACK)){
-			MS.detener();
-			MS.playSound(MS.buscarCancion(laCancion-1));
+			
 		}else if (ev.equals(STOP)) {
-			MS.detener();
+			
 		}else if (ev.equals(NEXT)) {
-			MS.detener();
-			MS.playSound(MS.buscarCancion(laCancion+1));
+			
 		}else if (ev.equals(START)) {
-			//MS.detener();
-			MS.playSound(MS.buscarCancion(laCancion));
+			
 		}
 		
 	}
 	
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
-		frame.add(new Musica());
+		frame.add(new PanelMusica());
 		frame.setVisible(true);
 	}
 	
