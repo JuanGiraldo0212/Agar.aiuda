@@ -12,6 +12,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -19,6 +21,8 @@ import java.util.ArrayList;
 import javax.net.ssl.SSLServerSocketFactory;
 
 import Audio.TransmissionThreadServer;
+import AudioViejito.HiloAudioUDPServer;
+import AudioViejito.MusicThreadServer;
 import model.Ball;
 import model.Game;
 import model.Player;
@@ -31,20 +35,27 @@ public class Server {
 	public static final String KEYSTORE_LOCATION = "./Docs/keystore.jks";
 	public static final String KEYSTORE_PASSWORD = "viejito";
 	public static final String LOG_PATH = "./Docs/Logs.txt";
+	public static final String MUSIC_PATH = "./Docs/Yoshi.wav";
+	public static final String MULTICAST_IP = "localhost";
+	public static final int MUSIC_PORT = 8001;
+	
 	
 	private ServerSocket serverSocket;
 	private ServerSocket serverSocketLobby;
 	private ServerSocket serverSocketGame;
+	private MulticastSocket serverSocketMusic;
 	private ArrayList<Socket> playersSockets;
 	private AsignationThread asignationThread;
 	private ArrayList<ServerLobbyThread> lobbyThreads;
 	private TimerThread timerThread;
+	private HiloAudioUDPServer musicThread;
 	private Game game;
 	private ArrayList<String> userNames;
 	private ArrayList<ServerCommunicationThread> serverThreads;
 	
 	public Server(int wait){
-		initGameServer(wait);
+		//initGameServer(wait);
+		musicThread = new HiloAudioUDPServer(this);
 	}
 	
 	public void initGameServer(int wait){
@@ -259,6 +270,22 @@ public class Server {
 
 	public void setServerThreads(ArrayList<ServerCommunicationThread> serverThreads) {
 		this.serverThreads = serverThreads;
+	}
+
+	public MulticastSocket getServerSocketMusic() {
+		return serverSocketMusic;
+	}
+
+	public void setServerSocketMusic(MulticastSocket serverSocketMusic) {
+		this.serverSocketMusic = serverSocketMusic;
+	}
+
+	public HiloAudioUDPServer getMusicThread() {
+		return musicThread;
+	}
+
+	public void setMusicThread(HiloAudioUDPServer musicThread) {
+		this.musicThread = musicThread;
 	}
 	
 

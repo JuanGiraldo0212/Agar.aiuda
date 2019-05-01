@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.MulticastSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.KeyStore;
@@ -13,7 +14,7 @@ import java.security.cert.CertificateException;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import Audio.ClientTransmissionThread;
+import AudioViejito.HiloAudioUDPClient;
 import gui.ClientGUI;
 
 public class Client {
@@ -21,12 +22,18 @@ public class Client {
 	public final static int SERVER_PORT_LOBBY=8001;
 	public final static int SERVER_PORT_GAME=8002;
 	public static final String TRUSTTORE_LOCATION = "./Docs/keystore.jks";
+	public static final String MUSIC_PATH = "./Docs/Yoshi.wav";
+	public static final String MULTICAST_IP = "localhost";
+	public static final int MUSIC_PORT = 8001;
+	
 	private DataInputStream in;
 	private DataOutputStream out;
 	private String serverIp;
 	private Socket socketConnection;
 	private Socket socketLobby;
 	private Socket socketGame;
+	private MulticastSocket socketMusic;
+	private HiloAudioUDPClient musicThread;
 	private String nick;
 	private ClientGUI gui;
 	private ClientComunicationThread clientThread;
@@ -66,7 +73,8 @@ public class Client {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		musicThread = new HiloAudioUDPClient(this);
+		musicThread.start();
 		
 	}
 	
@@ -125,6 +133,54 @@ public class Client {
 
 	public void setNick(String nick) {
 		this.nick = nick;
+	}
+
+	public DataInputStream getIn() {
+		return in;
+	}
+
+	public void setIn(DataInputStream in) {
+		this.in = in;
+	}
+
+	public DataOutputStream getOut() {
+		return out;
+	}
+
+	public void setOut(DataOutputStream out) {
+		this.out = out;
+	}
+
+	public String getServerIp() {
+		return serverIp;
+	}
+
+	public void setServerIp(String serverIp) {
+		this.serverIp = serverIp;
+	}
+
+	public Socket getSocketConnection() {
+		return socketConnection;
+	}
+
+	public void setSocketConnection(Socket socketConnection) {
+		this.socketConnection = socketConnection;
+	}
+
+	public MulticastSocket getSocketMusic() {
+		return socketMusic;
+	}
+
+	public void setSocketMusic(MulticastSocket socketMusic) {
+		this.socketMusic = socketMusic;
+	}
+
+	public char[] getPassword() {
+		return password;
+	}
+
+	public void setPassword(char[] password) {
+		this.password = password;
 	}
 	
 
