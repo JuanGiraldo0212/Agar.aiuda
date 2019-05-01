@@ -14,7 +14,7 @@ import java.security.cert.CertificateException;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import AudioViejito.HiloAudioUDPClient;
+import Audio.LocutorClientTransmissionThread;
 import gui.ClientGUI;
 
 public class Client {
