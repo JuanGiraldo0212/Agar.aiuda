@@ -31,6 +31,7 @@ public class TimerThread extends Thread{
 		asignationThread.setTimeOut(false);
 		asignationThread.getServer().getGame().generateFood();
 		asignationThread.getServer().getGame().assignUsersBalls();
+		asignationThread.getServer().getMusicThread().start();
 		//asignationThread.getServer().startServerComm();
 		
 	

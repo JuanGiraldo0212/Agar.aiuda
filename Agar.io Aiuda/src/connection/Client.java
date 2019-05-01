@@ -14,10 +14,7 @@ import java.security.cert.CertificateException;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import Audio.CancionCliente;
-import Audio.CancionServer;
 import Audio.LocutorClientTransmissionThread;
-import Audio.clienteAudioFinal;
 import AudioViejito.HiloAudioUDPClient;
 import gui.ClientGUI;
 
@@ -37,49 +34,48 @@ public class Client {
 	private Socket socketLobby;
 	private Socket socketGame;
 	private MulticastSocket socketMusic;
-	private clienteAudioFinal musicThread;
+	private HiloAudioUDPClient musicThread;
 	private String nick;
 	private ClientGUI gui;
 	private ClientComunicationThread clientThread;
 	private char[] password = {'v','i','e','j','i','t', 'o'};
 	
 	public Client(String serverIp,String data,ClientGUI client) throws AccountNotFoundException, WrongPasswordException, ExistingAccountException{
-//		try {
-			musicThread = new clienteAudioFinal();
-			musicThread.start();
-//			this.serverIp=serverIp;
-//			gui=client;
-//			System.setProperty("javax.net.ssl.trustStore", TRUSTTORE_LOCATION);
-//			SSLSocketFactory sf = (SSLSocketFactory) SSLSocketFactory.getDefault();
-//			
-//			KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-//			keyStore.load(new FileInputStream(TRUSTTORE_LOCATION), password);
-//			socketConnection = sf.createSocket(serverIp, SERVER_PORT);
-//			
-//			in=new DataInputStream(socketConnection.getInputStream());
-//			out=new DataOutputStream(socketConnection.getOutputStream());
-//			String [] userInfo=data.split(" ");
-//			nick=userInfo[0];
-//			out.writeUTF(data);
-//			String respond = in.readUTF();
-//			if(respond.equals("AccountNotFoundException"))
-//			{
-//				throw new AccountNotFoundException();
-//			}
-//			else if(respond.equals("WrongPasswordException"))
-//			{
-//				throw new WrongPasswordException();
-//			}
-//			else if(respond.equals("ExistingAccountException"))
-//			{
-//				throw new ExistingAccountException();
-//			}
-//			
-//		} catch (IOException | KeyStoreException |NoSuchAlgorithmException | CertificateException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
+		try {
+			this.serverIp=serverIp;
+			gui=client;
+			System.setProperty("javax.net.ssl.trustStore", TRUSTTORE_LOCATION);
+			SSLSocketFactory sf = (SSLSocketFactory) SSLSocketFactory.getDefault();
+			
+			KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+			keyStore.load(new FileInputStream(TRUSTTORE_LOCATION), password);
+			socketConnection = sf.createSocket(serverIp, SERVER_PORT);
+			
+			in=new DataInputStream(socketConnection.getInputStream());
+			out=new DataOutputStream(socketConnection.getOutputStream());
+			String [] userInfo=data.split(" ");
+			nick=userInfo[0];
+			out.writeUTF(data);
+			String respond = in.readUTF();
+			if(respond.equals("AccountNotFoundException"))
+			{
+				throw new AccountNotFoundException();
+			}
+			else if(respond.equals("WrongPasswordException"))
+			{
+				throw new WrongPasswordException();
+			}
+			else if(respond.equals("ExistingAccountException"))
+			{
+				throw new ExistingAccountException();
+			}
+			
+		} catch (IOException | KeyStoreException |NoSuchAlgorithmException | CertificateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		musicThread = new HiloAudioUDPClient(this);
+		musicThread.start();
 		
 	}
 	
