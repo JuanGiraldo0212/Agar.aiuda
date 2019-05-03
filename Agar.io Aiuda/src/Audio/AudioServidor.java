@@ -18,12 +18,16 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class AudioServidor extends Thread {
 
 	public final static int AUDIO_PORT = 9786;
+	public final static int FORMAT_PORT = 9787;
+
 	public final static String IP_DATOS = "239.1.2.2";
 	
 	private byte audioBuffer[] = new byte[60000];
+	private byte formatBuffer[] = new byte[60000];
 	private TargetDataLine targetDataLine;
 	private AudioInputStream audioStream;
-	private DatagramSocket socket ;
+	private DatagramSocket socketMusica ;
+	private DatagramSocket socketFormato ;
 	private File file;
 	
 	public void run() {
@@ -32,7 +36,8 @@ public class AudioServidor extends Thread {
 
 	public AudioServidor(String song) {
 		try {
-			socket = new DatagramSocket();
+			socketMusica = new DatagramSocket();
+			socketFormato = new DatagramSocket();
 			file= new File("./Musica/"+song);
 			audioStream= AudioSystem.getAudioInputStream(file);
 			setupAudio();
@@ -51,9 +56,16 @@ public class AudioServidor extends Thread {
 			while (true) {
 				int count = audioStream.read(audioBuffer, 0, audioBuffer.length);
 				if (count > 0) {
+					
+					String infoFormat = audioStream.getFormat().getSampleRate()+" "+audioStream.getFormat().getSampleSizeInBits()+" "+audioStream.getFormat().getChannels();
+					formatBuffer = infoFormat.getBytes();
+					
+					DatagramPacket packetFormat =  new DatagramPacket(formatBuffer, formatBuffer.length, inetAddress, FORMAT_PORT);
+					socketFormato.send(packetFormat);
+					
 					DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, inetAddress, AUDIO_PORT);
-					socket.send(packet);
-					sleep(300);
+					socketMusica.send(packet);
+					sleep(330);
 				}
 			}
 		} catch (Exception ex) {

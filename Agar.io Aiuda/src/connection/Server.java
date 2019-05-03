@@ -20,6 +20,8 @@ import java.util.ArrayList;
 
 import javax.net.ssl.SSLServerSocketFactory;
 
+import Audio.AudioServidor;
+
 //import Audio.CancionServer;
 
 //import Audio.servidorAudioFinal;
@@ -51,6 +53,7 @@ public class Server {
 	private ArrayList<String> userNames;
 	private ArrayList<ServerCommunicationThread> serverThreads;
 //	private CancionServer cancionservidor;
+	private AudioServidor audioServer;
 	
 	public Server(int wait){
 		initGameServer(wait);
@@ -75,19 +78,14 @@ public class Server {
 			serverSocketGame=new ServerSocket(SERVER_PORT_GAME);
 			asignationThread = new AsignationThread(this);
 			
-			//TODO
-			//Locutor
-			//servidorAudioFinal audioServer = new servidorAudioFinal();
-			//audioServer.start();
-		/*	
-			cancionservidor = new CancionServer();
-			cancionservidor.start();
-		*/	
+			
 			asignationThread.start();
 			timerThread=new TimerThread(asignationThread, wait);
 			
+			audioServer = new AudioServidor("RISE.wav");
+			audioServer.start();
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

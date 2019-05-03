@@ -20,16 +20,11 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class AudioCliente extends Thread {
 	private AudioInputStream audioInputStream;
 	private SourceDataLine sourceDataLine;
-	private AudioInputStream audio;	
-	private MulticastSocket socket;
+	private MulticastSocket socketMusica;
+	private MulticastSocket socketFormat;
 	
-	public AudioCliente(String song) {
-		File file = new File("./Musica/"+song);
-		try {
-			audio = AudioSystem.getAudioInputStream(file);
-		} catch (UnsupportedAudioFileException | IOException e) {
-			e.printStackTrace();
-		}
+	public AudioCliente() {
+
 	}
 
 	private void playAudio() {
@@ -38,7 +33,7 @@ public class AudioCliente extends Thread {
 			int count;
 			while ((count = audioInputStream.read(buffer, 0, buffer.length)) != -1) {
 				if (count > 0) {
-					sleep(300);
+					sleep(330);
 					sourceDataLine.write(buffer, 0, count);		
 				}
 			}
@@ -48,17 +43,39 @@ public class AudioCliente extends Thread {
 
 	private void initiateAudio() {
 		try {
-			socket = new MulticastSocket(AudioServidor.AUDIO_PORT);
+			socketMusica = new MulticastSocket(AudioServidor.AUDIO_PORT);
+			socketFormat = new MulticastSocket(AudioServidor.FORMAT_PORT);
+			
 			InetAddress inetAddress = InetAddress.getByName(AudioServidor.IP_DATOS);
-			socket.joinGroup(inetAddress);
+			
+			socketMusica.joinGroup(inetAddress);
+			socketFormat.joinGroup(inetAddress);
+			
 			byte[] audioBuffer = new byte[60000];
+			byte[] formatBuffer = new byte[60000];
+			
 			while (true) {
+				DatagramPacket packetFormat = new DatagramPacket(formatBuffer, formatBuffer.length);
+				socketFormat.receive(packetFormat);
+				
 				DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length);
-				socket.receive(packet);
+				socketMusica.receive(packet);
 				try {
 					byte audioData[] = packet.getData();
+					byte formatData[] = packetFormat.getData();
+					
+					String infoFormato = new String(formatData);
+					String[] data  = infoFormato.split(" ");
+
+					float data0 = Float.parseFloat(data[0]);
+					int data1 = Integer.parseInt(data[1]);
+					double data2 = Double.parseDouble(data[2]);					
+					
+					AudioFormat af = new AudioFormat(data0,data1,(int)data2, true, false);
+					
 					InputStream byteInputStream = new ByteArrayInputStream(audioData);
-					AudioFormat audioFormat = audio.getFormat();				
+					
+					AudioFormat audioFormat = af;	
 					audioInputStream = new AudioInputStream(byteInputStream, audioFormat,audioData.length / audioFormat.getFrameSize());					
 					DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
 					sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);

@@ -14,6 +14,7 @@ import java.security.cert.CertificateException;
 
 import javax.net.ssl.SSLSocketFactory;
 
+import Audio.AudioCliente;
 //import Audio.CancionCliente;
 //import AudioViejito.HiloAudioUDPClient;
 import gui.ClientGUI;
@@ -36,12 +37,14 @@ public class Client {
 	private ClientGUI gui;
 	private ClientComunicationThread clientThread;
 	private char[] password = {'v','i','e','j','i','t', 'o'};
-	
+	private AudioCliente audioCliente;
 	//clienteAudioFinal audioCliente;
 //	CancionCliente cancionCliente;
 	
 	public Client(String serverIp,String data,ClientGUI client) throws AccountNotFoundException, WrongPasswordException, ExistingAccountException{
 		try {
+			audioCliente= new AudioCliente();
+			
 			this.serverIp=serverIp;
 			gui=client;
 			System.setProperty("javax.net.ssl.trustStore", TRUSTTORE_LOCATION);
@@ -80,6 +83,7 @@ public class Client {
 		cancionCliente = new CancionCliente();
 		cancionCliente.start();
 		*/
+		audioCliente.start();
 	}
 	
 	public void startLobbySocket() {
