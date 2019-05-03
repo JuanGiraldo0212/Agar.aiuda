@@ -15,6 +15,7 @@ public class Ball implements Serializable{
 	private Color color;
 	private double radius;
 	private double speed;
+	private boolean active;
 	
 	public Ball(double posX, double posY, Color color, double radius) {
 		super();
@@ -22,6 +23,7 @@ public class Ball implements Serializable{
 		this.color = color;
 		this.radius = radius;
 		this.speed = 3;
+		active=true;
 	}
 	
 	public void move(Point e) {
@@ -41,21 +43,25 @@ public class Ball implements Serializable{
 		boolean eat=false;
 		Vec2 actual=pos.sub(other.pos);
 		if((actual.getLength()+radius/2)<radius+other.getRadius()){
-			eat=true;
-			double sum=(Math.PI*radius*radius)+(Math.PI*other.radius*other.radius);
-			double newRadius=Math.sqrt(sum/Math.PI);
-			radius=newRadius;
-			System.out.println("Crece");
-			if(radius<=1) {
-				speed=1;
-			}
-			else {
+			if(radius>other.radius) {
 				
-				speed-=0.01;
+				eat=true;
+				double sum=(Math.PI*radius*radius)+(Math.PI*other.radius*other.radius);
+				double newRadius=Math.sqrt(sum/Math.PI);
+				radius=newRadius;
+				System.out.println("Crece");
+				if(radius<=1) {
+					speed=1;
+				}
+				else {
+					
+					speed-=0.01;
+				}
 			}
 		}
 		return eat;
 	}
+	
 	
 	public double getPosX() {
 		return pos.getX();
@@ -94,6 +100,14 @@ public class Ball implements Serializable{
 
 	public void setPos(Vec2 pos) {
 		this.pos = pos;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 	

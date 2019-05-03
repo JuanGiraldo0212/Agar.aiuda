@@ -22,10 +22,10 @@ public class AsignationThread extends Thread{
 	public void run() {
 		// TODO Auto-generated method stub
 		super.run();
-		while(server.getPlayersSockets().size()<5 && inTime){
+		while(inTime){
 			try {
 				Socket socket=server.getServerSocket().accept();
-				if(inTime) {
+				if(inTime && server.getPlayersSockets().size()<5) {
 					
 					if(server.getPlayersSockets().size()==1) {
 						server.starTimer();

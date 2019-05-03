@@ -40,7 +40,11 @@ public class LobbyThread extends Thread{
 				client.getGui().getLobby().repaint();
 			}
 			System.out.println("Sale del lobby");
-			client.startGameComm();
+			if(client.getType().equals(Client.TYPE_PLAYER)) {
+				
+				client.startGameComm();
+			}
+			
 			
 			
 		} catch (IOException e) {

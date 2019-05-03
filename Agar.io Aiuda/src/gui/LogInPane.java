@@ -15,11 +15,14 @@ import java.io.IOException;
 
 import javax.swing.*;
 
+import connection.Client;
+
 //import Conection.Client;
 
 public class LogInPane extends JPanel implements ActionListener{
 	
 	public final static String START="Start";
+	public final static String WATCH="Watch";
 	public final static String LOGS = "./Logs.txt";
 	ClientGUI main;
 	JPanel aux;
@@ -30,6 +33,7 @@ public class LogInPane extends JPanel implements ActionListener{
 	JLabel lblPass;
 	JTextField txtPass;
 	JButton btnStart;
+	JButton btnWatch;
 	
 	public LogInPane(ClientGUI main) {
 		this.main=main;
@@ -44,16 +48,21 @@ public class LogInPane extends JPanel implements ActionListener{
 		lblPass=new JLabel("Password:");
 		txtPass=new JTextField();
 		txtPass.setPreferredSize(new Dimension(100, 20));
-		btnStart=new JButton("Start");
+		btnStart=new JButton("Play");
 		btnStart.addActionListener(this);
 		btnStart.setEnabled(false);
 		btnStart.setActionCommand(START);
+		btnWatch=new JButton("Watch");
+		btnWatch.addActionListener(this);
+		btnWatch.setEnabled(false);
+		btnWatch.setActionCommand(WATCH);
 		aux.add(lblMail);
 		aux.add(txtMail);
 		aux2.add(lblPass);
 		aux2.add(txtPass);
 		aux3.add(new JLabel(" "));
 		aux3.add(btnStart);
+		aux3.add(btnWatch);
 		aux3.add(new JLabel(" "));
 		add(aux);
 		add(aux2);
@@ -82,7 +91,11 @@ public class LogInPane extends JPanel implements ActionListener{
 		if(comando.equals(START))
 		{
 			String resp=JOptionPane.showInputDialog("Ingrese la ip del servidor");
-			main.startGame(resp, txtMail.getText()+" "+txtPass.getText());
+			main.startGame(resp, txtMail.getText()+" "+txtPass.getText(),Client.TYPE_PLAYER);
+		}
+		else {
+			String resp=JOptionPane.showInputDialog("Ingrese la ip del servidor");
+			main.startGame(resp, txtMail.getText()+" "+txtPass.getText(),Client.TYPE_VIEWER);
 		}
 		
 	}
@@ -109,6 +122,14 @@ public class LogInPane extends JPanel implements ActionListener{
 
 	public void setBtnStart(JButton btnStart) {
 		this.btnStart = btnStart;
+	}
+
+	public JButton getBtnWatch() {
+		return btnWatch;
+	}
+
+	public void setBtnWatch(JButton btnWatch) {
+		this.btnWatch = btnWatch;
 	}
 	
 

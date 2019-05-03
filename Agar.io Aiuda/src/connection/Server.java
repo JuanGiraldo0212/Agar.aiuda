@@ -12,21 +12,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
 import javax.net.ssl.SSLServerSocketFactory;
 
-import Audio.AudioServidor;
-
-//import Audio.CancionServer;
-
-//import Audio.servidorAudioFinal;
-//import Audio.LocutorTransmissionThreadServer;
-//import AudioViejito.HiloAudioUDPServer;
+import gui.GameThread;
 import model.Ball;
 import model.Game;
 import model.Player;
@@ -36,28 +30,31 @@ public class Server {
 	public final static int SERVER_PORT=8000;
 	public final static int SERVER_PORT_LOBBY=8001;
 	public final static int SERVER_PORT_GAME=8002;
+	public final static int SERVER_PORT_VIEW=8003;
+	public final static String IP_MULTICAST = "230.1.1.1";
 	public static final String KEYSTORE_LOCATION = "./Docs/keystore.jks";
 	public static final String KEYSTORE_PASSWORD = "viejito";
-	public static final String LOG_PATH = "./Docs/Logs.txt";	
+	public static final String LOG_PATH = "./Docs/Logs.txt";
 	
 	private ServerSocket serverSocket;
 	private ServerSocket serverSocketLobby;
 	private ServerSocket serverSocketGame;
-	private MulticastSocket serverSocketMusic;
+	private DatagramSocket serverSocketView;
 	private ArrayList<Socket> playersSockets;
+	//private ArrayList<DatagramSocket> viewersSockets;
 	private AsignationThread asignationThread;
+
 	private ArrayList<ServerLobbyThread> lobbyThreads;
 	private TimerThread timerThread;
-	//private HiloAudioUDPServer musicThread;
 	private Game game;
 	private ArrayList<String> userNames;
 	private ArrayList<ServerCommunicationThread> serverThreads;
-//	private CancionServer cancionservidor;
-	private AudioServidor audioServer;
+	private ServerViewThread viewThread;
+	private GameThread gameThread;
+	private boolean startView;
 	
 	public Server(int wait){
 		initGameServer(wait);
-		//musicThread = new HiloAudioUDPServer(this);
 	}
 	
 	public void initGameServer(int wait){
@@ -70,63 +67,73 @@ public class Server {
 			playersSockets=new ArrayList<>();
 			lobbyThreads=new ArrayList<ServerLobbyThread>();
 			serverThreads=new ArrayList<ServerCommunicationThread>();
+			serverSocketView=new DatagramSocket();
+			viewThread=new ServerViewThread(this);
+			viewThread.start();
 			
 			SSLServerSocketFactory ssf = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 			serverSocket = ssf.createServerSocket(SERVER_PORT);
 			
 			serverSocketLobby=new ServerSocket(SERVER_PORT_LOBBY);
 			serverSocketGame=new ServerSocket(SERVER_PORT_GAME);
+			
+			
+			
 			asignationThread = new AsignationThread(this);
-			
-			
 			asignationThread.start();
 			timerThread=new TimerThread(asignationThread, wait);
-			
-			audioServer = new AudioServidor("RISE.wav");
-			audioServer.start();
-			
+			gameThread=new GameThread(this, 30);
+		
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	
-	
 	public String getInfoGame() {
 		String data="";
-		for(int i=0;i<game.getPlayers().size();i++) {
-			Player actual=game.getPlayers().get(i);
-			String nick=actual.getNickName();
-			Ball ball=actual.getBall();
-			double posX=ball.getPosX();
-			double posY=ball.getPosY();
-			double radius=ball.getRadius();
-			Color color=ball.getColor();
-			if(i==game.getPlayers().size()-1) {
-				data+=nick+","+posX+","+posY+","+color.getRGB()+","+radius;
-				
+		if(startView) {
+			
+			boolean gameStatus=game.isActive();
+			data+=gameStatus+"&";
+			for(int i=0;i<game.getPlayers().size();i++) {
+				Player actual=game.getPlayers().get(i);
+				String nick=actual.getNickName();
+				Ball ball=actual.getBall();
+				double posX=ball.getPosX();
+				double posY=ball.getPosY();
+				double radius=ball.getRadius();
+				Color color=ball.getColor();
+				boolean active=ball.isActive();
+				if(i==game.getPlayers().size()-1) {
+					data+=nick+","+posX+","+posY+","+color.getRGB()+","+radius+","+active;
+					
+				}
+				else {
+					data+=nick+","+posX+","+posY+","+color.getRGB()+","+radius+","+active+" ";
+				}
 			}
-			else {
-				data+=nick+","+posX+","+posY+","+color.getRGB()+","+radius+" ";
+			
+			data+="&";
+			if(game.getArrFood().size()==0){
+				//System.out.println("Vacio");
+			}
+			for(int i=0;i<game.getArrFood().size();i++){
+				Ball actual=game.getArrFood().get(i);
+				double posX=actual.getPosX();
+				double posY=actual.getPosY();
+				double radius=actual.getRadius();
+				int color=actual.getColor().getRGB();
+				if(i==game.getArrFood().size()-1){
+					data+=posX+","+posY+","+radius+","+color;
+				}
+				else{
+					data+=posX+","+posY+","+radius+","+color+" ";
+				}
 			}
 		}
-		
-		data+="&";
-		if(game.getArrFood().size()==0){
-			//System.out.println("Vacio");
-		}
-		for(int i=0;i<game.getArrFood().size();i++){
-			Ball actual=game.getArrFood().get(i);
-			double posX=actual.getPosX();
-			double posY=actual.getPosY();
-			double radius=actual.getRadius();
-			int color=actual.getColor().getRGB();
-			if(i==game.getArrFood().size()-1){
-				data+=posX+","+posY+","+radius+","+color;
-			}
-			else{
-				data+=posX+","+posY+","+radius+","+color+" ";
-			}
+		else {
+			data="No";
 		}
 		
 		return data;
@@ -138,12 +145,15 @@ public class Server {
 		double posX=Double.parseDouble(dataSplit[1]);
 		double posY=Double.parseDouble(dataSplit[2]);
 		double radius=Double.parseDouble(dataSplit[3]);
+		boolean active=Boolean.parseBoolean(dataSplit[4]);
 		Player actual=game.getPlayer(nick);
 		Ball ball=actual.getBall();
 		ball.setPosX(posX);
 		ball.setPosY(posY);
 		ball.setRadius(radius);
+		ball.setActive(active);
 		ArrayList<Ball> food=game.getArrFood();
+		ArrayList<Player> enemies=game.getPlayers();
 		if(food.size()==0){
 			//System.out.println("Vacio");
 		}
@@ -152,6 +162,19 @@ public class Server {
 			if(ball.eat(actualBall)){
 				food.remove(actualBall);
 				System.out.println("Come");
+			}
+		}
+		
+		for(int i=0;i<enemies.size();i++) {
+			Player actualEn=enemies.get(i);
+			Ball enemie=actualEn.getBall();
+			if(!actual.equals(actualEn)) {
+				if(enemie.isActive()) {
+					
+					if(ball.eat(enemie)) {
+						enemie.setActive(false);
+					}
+				}
 			}
 		}
 		
@@ -280,21 +303,48 @@ public class Server {
 		this.serverThreads = serverThreads;
 	}
 
-	public MulticastSocket getServerSocketMusic() {
-		return serverSocketMusic;
+	public GameThread getGameThread() {
+		return gameThread;
 	}
 
-	public void setServerSocketMusic(MulticastSocket serverSocketMusic) {
-		this.serverSocketMusic = serverSocketMusic;
-	}
-/*
-	public HiloAudioUDPServer getMusicThread() {
-		return musicThread;
+	public void setGameThread(GameThread gameThread) {
+		this.gameThread = gameThread;
 	}
 
-	public void setMusicThread(HiloAudioUDPServer musicThread) {
-		this.musicThread = musicThread;
+	public DatagramSocket getServerSocketView() {
+		return serverSocketView;
 	}
-*/	
+
+	public void setServerSocketView(DatagramSocket serverSocketView) {
+		this.serverSocketView = serverSocketView;
+	}
+
+	/*
+	public ArrayList<DatagramSocket> getViewersSockets() {
+		return viewersSockets;
+	}
+
+	public void setViewersSockets(ArrayList<DatagramSocket> viewersSockets) {
+		this.viewersSockets = viewersSockets;
+	}
+*/
+	public ServerViewThread getViewThreads() {
+		return viewThread;
+	}
+
+	public void setViewThreads(ServerViewThread viewThreads) {
+		this.viewThread = viewThreads;
+	}
+
+	public boolean isStartView() {
+		return startView;
+	}
+
+	public void setStartView(boolean startView) {
+		this.startView = startView;
+	}
+	
+	
+	
 
 }

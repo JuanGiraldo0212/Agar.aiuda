@@ -10,6 +10,7 @@ import java.util.Random;
 
 import javax.swing.*;
 
+import connection.Client;
 import model.*;
 
 
@@ -32,10 +33,12 @@ public class Draw extends JPanel implements MouseMotionListener{
 		setFocusable(true);
 		//scale=1
 		Game ok=main.getGame();
-		Player actual=ok.getPlayer(main.getClient().getNick());
-		playerBall = actual.getBall();
-		thread=new BallThread(main, playerBall);
-		thread.start();
+		if(main.getClient().getType().equals(Client.TYPE_PLAYER)) {
+			Player actual=ok.getPlayer(main.getClient().getNick());
+			playerBall = actual.getBall();
+			thread=new BallThread(main, playerBall);
+			thread.start();
+		}
 		food = main.getGame().getArrFood();
 		enemies = main.getGame().getPlayers();
 		
@@ -52,12 +55,29 @@ public class Draw extends JPanel implements MouseMotionListener{
 		//g2.translate(Game.ANCHO/2, Game.LARGO/2);
 		//g2.scale(50.0/player.getRadius(),50.0/player.getRadius());
 		//g2.translate(-player.getPosX(), -player.getPosY());
-		g2.setColor(playerBall.getColor());
-		g2.fillOval((int)playerBall.getPosX()-(int)(playerBall.getRadius()/2), (int)(playerBall.getPosY()-(int)playerBall.getRadius()/2), (int)playerBall.getRadius(), (int)playerBall.getRadius());
-		g2.setColor(Color.BLACK);
 		g2.setFont(new Font("Arial", Font.PLAIN, 30));
-		g2.drawString("Puntaje: "+(int)playerBall.getRadius(), 20, 40);
-		g2.drawString(main.getClient().getNick(), (int)playerBall.getPosX(), (int)playerBall.getPosY());
+		for (int i = 0; i < enemies.size(); i++)
+		{
+			Player actualPlayer=enemies.get(i);
+			Ball actual= actualPlayer.getBall();
+			if(playerBall!=actual && actual.isActive()) {
+				g2.setColor(actual.getColor());
+				g2.fillOval((int)actual.getPosX(), (int)actual.getPosY(), (int)actual.getRadius(), (int)actual.getRadius());
+				g2.setColor(Color.BLACK);
+				g2.drawString(actualPlayer.getNickName(), (int)actual.getPosX()+((int)actual.getRadius()/2), (int)actual.getPosY()+((int)actual.getRadius()/2));
+			}
+		}
+		if(main.getClient().getType().equals(Client.TYPE_PLAYER)) {
+			
+			if(playerBall.isActive()) {
+				g2.setColor(playerBall.getColor());
+				g2.fillOval((int)playerBall.getPosX()-(int)(playerBall.getRadius()/2), (int)(playerBall.getPosY()-(int)playerBall.getRadius()/2), (int)playerBall.getRadius(), (int)playerBall.getRadius());
+				g2.setColor(Color.BLACK);
+				g2.drawString(main.getClient().getNick(), (int)playerBall.getPosX(), (int)playerBall.getPosY());
+			}
+			g2.setColor(Color.BLACK);
+			g2.drawString("Puntaje: "+(int)playerBall.getRadius(), 20, 40);
+		}
 		
 		food=main.getGame().getArrFood();
 		for(int i=0;i<food.size();i++){
@@ -67,20 +87,14 @@ public class Draw extends JPanel implements MouseMotionListener{
 //			if(playerBall.eat(actual)){
 //				food.remove(actual);
 //			}
-		}	
-		
-		for (int i = 0; i < enemies.size(); i++)
-		{
-			Player actualPlayer=enemies.get(i);
-			Ball actual= actualPlayer.getBall();
-			if(playerBall!=actual) {
-				
-				g2.setColor(actual.getColor());
-				g2.fillOval((int)actual.getPosX(), (int)actual.getPosY(), (int)actual.getRadius(), (int)actual.getRadius());
-				g2.setColor(Color.BLACK);
-				g2.drawString(actualPlayer.getNickName(), (int)actual.getPosX()+((int)actual.getRadius()/2), (int)actual.getPosY()+((int)actual.getRadius()/2));
-			}
 		}
+		
+		if(!main.getGame().isActive()) {
+			g2.setColor(Color.BLACK);
+			g2.setFont(new Font("Arial", Font.PLAIN, 100));
+			g2.drawString("El ganador es: "+main.getGame().getWinner().getNickName(), 20, this.getHeight()/2);
+		}
+		
 		//System.out.println("Se actualizó draw");
 	}
 	

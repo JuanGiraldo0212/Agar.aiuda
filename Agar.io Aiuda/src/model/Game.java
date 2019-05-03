@@ -13,7 +13,7 @@ import javax.swing.text.PlainDocument;
 public class Game implements Serializable {
 	
 	//Constantes
-	public final static int MAX_FOOD=5;
+	public final static int MAX_FOOD=500;
 	
 	
 	public static long MATCH_TTL = 5000*60000;
@@ -29,6 +29,8 @@ public class Game implements Serializable {
 	
 	//relación que contiene a los jugadores
 	private ArrayList<Player> players;
+	
+	private boolean active;
 		
 	//Constructor
 	
@@ -38,6 +40,7 @@ public class Game implements Serializable {
 		
 		food = new ArrayList<>();
 		players = new ArrayList<>();
+		active=true;
 		
 	}
 	/**
@@ -106,6 +109,39 @@ public class Game implements Serializable {
 		}
 		return players;
 	}
+	
+	public boolean onePlayer() {
+		boolean one=false;
+		int count=0;
+		for(int i=0;i<players.size();i++) {
+			if(players.get(i).getBall().isActive()) {
+				count++;
+			}
+		}
+		if(count==1) {
+			one=true;
+		}
+		return one;
+	}
+	
+	public Player getWinner() {
+		Player winner=null;
+		Player temp=null;
+		double max=-1;
+		for(int i=0;i<players.size();i++) {
+			Player actual=players.get(i);
+			Ball actualBall=actual.getBall();
+			if(actualBall.isActive()) {
+				if(actualBall.getRadius()>max) {
+					max=actualBall.getRadius();
+					temp=actual;
+				}
+				
+			}
+		}
+		winner=temp;
+		return winner;
+	}
 
 	public ArrayList<Ball> getArrFood() {
 		return food;
@@ -142,6 +178,12 @@ public class Game implements Serializable {
 			}
 		}
 		return player;
+	}
+	public boolean isActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 	

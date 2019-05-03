@@ -11,7 +11,7 @@ public class ServerGUI extends JFrame{
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		server = new Server(10);
+		server = new Server(30);
 		
 	}
 

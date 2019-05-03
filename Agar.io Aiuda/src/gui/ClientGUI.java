@@ -88,12 +88,18 @@ public class ClientGUI extends JFrame implements ActionListener{
 		clientGUI.setVisible(true);
 	}
 	
-	public void startGame(String serverIp,String data) {
+	public void startGame(String serverIp,String data,String type) {
 		 try 
 		 {
 			 
-			client=new Client(serverIp, data,this);
-			lobby();
+			client=new Client(serverIp, data,this,type);
+			if(type.equals(Client.TYPE_PLAYER)) {
+				
+				lobby();
+			}
+			else {
+				client.startGameView();
+			}
 			
 		 } catch (AccountNotFoundException | WrongPasswordException | ExistingAccountException e) {
 			 
@@ -102,6 +108,8 @@ public class ClientGUI extends JFrame implements ActionListener{
 		 }
 		
 	}
+	
+	
 	
 	public void lobby() {
 		remove(first);
@@ -118,7 +126,7 @@ public class ClientGUI extends JFrame implements ActionListener{
 		//Poner panel game
 	}
 	
-	public void upDateGame(String[] players,String[] food) {
+	public void upDateGame(boolean status,String[] players,String[] food) {
 		if(game==null) {
 			game=new Game();
 			ArrayList<Player> playerList=new ArrayList<Player>();
@@ -142,22 +150,37 @@ public class ClientGUI extends JFrame implements ActionListener{
 			}
 			for(int i=0;i<food.length;i++){
 				String[] data=food[i].split(",");
+				System.out.println(food[i]);
 				double posX=Double.parseDouble(data[0]);
 				double posY=Double.parseDouble(data[1]);
 				double radius=Double.parseDouble(data[2]);
-				int color=Integer.parseInt(data[3]);
+				int color;
+				try {
+					
+					color=Integer.parseInt(data[3]);
+				} catch (Exception e) {
+					// TODO: handle exception
+					color=Color.RED.getRGB();
+				}
 				Ball ball=new Ball(posX, posY, new Color(color), radius);
 				arrFood.add(ball);
 			}
 			game.setArrFood(arrFood);
 			draw=new Draw(this);
-			remove(lobby);
+			if(client.getType().equals(Client.TYPE_PLAYER)) {
+				
+				remove(lobby);
+			}
+			else {
+				remove(first);
+			}
 			add(draw,BorderLayout.CENTER);
 			pack();
 			setSize(new Dimension(1000,1000));
 		}
 		else {
 			ArrayList<Player> jugadores=game.getPlayers();
+			game.setActive(status);
 			for(int i=0;i<players.length;i++) {
 				String[] data=players[i].split(",");
 				Player actual=jugadores.get(i);
@@ -167,18 +190,21 @@ public class ClientGUI extends JFrame implements ActionListener{
 					double posY=Double.parseDouble(data[2]);
 					double radius=Double.parseDouble(data[4]);
 					Color color=new Color(Integer.parseInt(data[3]));
+					boolean active=Boolean.parseBoolean(data[5]);
 					Ball ball=actual.getBall();
 					ball.setPosX(posX);
 					ball.setPosY(posY);
 					ball.setRadius(radius);
 					ball.setColor(color);
+					ball.setActive(active);
 				}
 				else{
 					
 					double radius=Double.parseDouble(data[4]);
-					
+					boolean active=Boolean.parseBoolean(data[5]);
 					Ball ball=actual.getBall();
 					ball.setRadius(radius);
+					ball.setActive(active);
 					
 				}
 			}
@@ -193,7 +219,14 @@ public class ClientGUI extends JFrame implements ActionListener{
 				double posX=Double.parseDouble(data[0]);
 				double posY=Double.parseDouble(data[1]);
 				double radius=Double.parseDouble(data[2]);
-				int color=Integer.parseInt(data[3]);
+				int color;
+				try {
+					
+					color=Integer.parseInt(data[3]);
+				} catch (Exception e) {
+					// TODO: handle exception
+					color=Color.RED.getRGB();
+				}
 				actual.setColor(new Color(color));
 				actual.setPosX(posX);
 				actual.setPosY(posY);
@@ -216,6 +249,7 @@ public class ClientGUI extends JFrame implements ActionListener{
 			btnRegister.setEnabled(false);
 			btnLogIn.setEnabled(true);
 			register.getBtnStart().setEnabled(true);
+			register.getBtnWatch().setEnabled(true);
 			first.add(register,BorderLayout.CENTER);
 			pack();
 		}
@@ -229,6 +263,7 @@ public class ClientGUI extends JFrame implements ActionListener{
 			btnLogIn.setEnabled(false);
 			btnRegister.setEnabled(true);
 			logIn.getBtnStart().setEnabled(true);
+			logIn.getBtnWatch().setEnabled(true);
 			first.add(logIn,BorderLayout.CENTER);
 			pack();
 			

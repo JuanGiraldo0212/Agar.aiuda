@@ -11,9 +11,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import connection.Client;
+
 public class RegisterPane extends JPanel implements ActionListener{
 	
 	public final static String START="Start";
+	public final static String WATCH="Watch";
 	ClientGUI main;
 	JPanel aux;
 	JPanel aux2;
@@ -26,6 +29,7 @@ public class RegisterPane extends JPanel implements ActionListener{
 	JLabel lblPass;
 	JTextField txtPass;
 	JButton btnStart;
+	JButton btnWatch;
 	
 	public RegisterPane(ClientGUI main) {
 		
@@ -45,16 +49,20 @@ public class RegisterPane extends JPanel implements ActionListener{
 		lblPass=new JLabel("Password:");
 		txtPass=new JTextField();
 		txtPass.setPreferredSize(new Dimension(100, 20));
-		btnStart=new JButton("Start");
+		btnStart=new JButton("Play");
 		btnStart.addActionListener(this);
 		btnStart.setEnabled(false);
 		btnStart.setActionCommand(START);
+		btnWatch=new JButton("Watch");
+		btnWatch.addActionListener(this);
+		btnWatch.setActionCommand(WATCH);
 		aux.add(lblMail);
 		aux.add(txtMail);
 		aux2.add(lblPass);
 		aux2.add(txtPass);
 		aux3.add(new JLabel(" "));
 		aux3.add(btnStart);
+		aux3.add(btnWatch);
 		aux3.add(new JLabel(" "));
 		aux4.add(lblNick);
 		aux4.add(txtNick);
@@ -67,9 +75,14 @@ public class RegisterPane extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command=e.getActionCommand();
-		if(command.equals(START)) {
+		if(command.equals(START))
+		{
 			String resp=JOptionPane.showInputDialog("Ingrese la ip del servidor");
-			main.startGame(resp, txtNick.getText()+" "+txtMail.getText()+" "+txtPass.getText());
+			main.startGame(resp, txtMail.getText()+" "+txtPass.getText(),Client.TYPE_PLAYER);
+		}
+		else {
+			String resp=JOptionPane.showInputDialog("Ingrese la ip del servidor");
+			main.startGame(resp, txtMail.getText()+" "+txtPass.getText(),Client.TYPE_VIEWER);
 		}
 		
 	}
@@ -105,6 +118,15 @@ public class RegisterPane extends JPanel implements ActionListener{
 	public void setBtnStart(JButton btnStart) {
 		this.btnStart = btnStart;
 	}
+
+	public JButton getBtnWatch() {
+		return btnWatch;
+	}
+
+	public void setBtnWatch(JButton btnWatch) {
+		this.btnWatch = btnWatch;
+	}
+	
 	
 	
 }
