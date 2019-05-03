@@ -17,6 +17,7 @@ import java.security.cert.CertificateException;
 
 import javax.net.ssl.SSLSocketFactory;
 
+import Audio.AudioCliente;
 import gui.ClientGUI;
 
 public class Client {
@@ -41,6 +42,9 @@ public class Client {
 	private ClientViewThread viewThread;
 	private char[] password = {'v','i','e','j','i','t', 'o'};
 	private String type;
+	
+	private AudioCliente audioClient;
+	
 	public Client(String serverIp,String data,ClientGUI client,String type) throws AccountNotFoundException, WrongPasswordException, ExistingAccountException{
 		try {
 			this.serverIp=serverIp;
@@ -71,8 +75,9 @@ public class Client {
 				{
 					throw new ExistingAccountException();
 				}
+				audioClient = new AudioCliente();
+				audioClient.start();
 			}
-			
 			
 		} catch (IOException | KeyStoreException |NoSuchAlgorithmException | CertificateException e) {
 			// TODO Auto-generated catch block

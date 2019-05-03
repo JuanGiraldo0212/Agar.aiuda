@@ -38,7 +38,7 @@ public class AudioServidor extends Thread {
 		try {
 			socketMusica = new DatagramSocket();
 			socketFormato = new DatagramSocket();
-			file= new File("./Musica/"+song+".wav");
+			file= new File("./Musica/"+song);
 			audioStream= AudioSystem.getAudioInputStream(file);
 			setupAudio();
 		} catch (SocketException e) {
@@ -65,7 +65,7 @@ public class AudioServidor extends Thread {
 					
 					DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, inetAddress, AUDIO_PORT);
 					socketMusica.send(packet);
-					sleep(330);
+					sleep(AudioCliente.TIME_SLEEP);
 				}
 			}
 		} catch (Exception ex) {
