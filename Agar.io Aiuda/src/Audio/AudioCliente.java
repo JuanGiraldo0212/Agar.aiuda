@@ -1,6 +1,8 @@
 package Audio;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -13,62 +15,51 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.TargetDataLine;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
-public class clienteAudioFinal extends Thread {
-	AudioInputStream audioInputStream;
-	SourceDataLine sourceDataLine;
-
-	MulticastSocket socket;
-
-	public clienteAudioFinal() {
-		// TODO Auto-generated constructor stub
-
-	}
-
-	public void run() {
-		initiateAudio();
-	}
-
-	private AudioFormat getAudioFormat() {
-		float sampleRate = 16000F;
-		int sampleSizeInBits = 16;
-		int channels = 1;
-		boolean signed = true;
-		boolean bigEndian = false;
-		return new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
+public class AudioCliente extends Thread {
+	private AudioInputStream audioInputStream;
+	private SourceDataLine sourceDataLine;
+	private AudioInputStream audio;	
+	private MulticastSocket socket;
+	
+	public AudioCliente(String song) {
+		File file = new File("./Musica/"+song);
+		try {
+			audio = AudioSystem.getAudioInputStream(file);
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void playAudio() {
-		byte[] buffer = new byte[10000];
+		byte[] buffer = new byte[60000];
 		try {
 			int count;
 			while ((count = audioInputStream.read(buffer, 0, buffer.length)) != -1) {
 				if (count > 0) {
-					sourceDataLine.write(buffer, 0, count);
+					sleep(300);
+					sourceDataLine.write(buffer, 0, count);		
 				}
 			}
 		} catch (Exception e) {
-			// Handle exceptions
 		}
 	}
 
 	private void initiateAudio() {
 		try {
-			socket = new MulticastSocket(servidorAudioFinal.SOCKET_AUDIO);
-			InetAddress inetAddress = InetAddress.getByName(servidorAudioFinal.IP_AUDIO);
+			socket = new MulticastSocket(AudioServidor.AUDIO_PORT);
+			InetAddress inetAddress = InetAddress.getByName(AudioServidor.IP_DATOS);
 			socket.joinGroup(inetAddress);
-			byte[] audioBuffer = new byte[10000];
-			// ...
+			byte[] audioBuffer = new byte[60000];
 			while (true) {
 				DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length);
 				socket.receive(packet);
 				try {
 					byte audioData[] = packet.getData();
 					InputStream byteInputStream = new ByteArrayInputStream(audioData);
-					AudioFormat audioFormat = getAudioFormat();
-					System.out.println(audioFormat);
-					audioInputStream = new AudioInputStream(byteInputStream, audioFormat,audioData.length / audioFormat.getFrameSize());
-					
+					AudioFormat audioFormat = audio.getFormat();				
+					audioInputStream = new AudioInputStream(byteInputStream, audioFormat,audioData.length / audioFormat.getFrameSize());					
 					DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
 					sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
 					sourceDataLine.open(audioFormat);
@@ -79,9 +70,14 @@ public class clienteAudioFinal extends Thread {
 				}
 
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void run() {
+		initiateAudio();
+	}
+	
 }

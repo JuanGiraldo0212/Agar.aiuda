@@ -60,6 +60,8 @@ public class MakeSound {
 
         audioFormat = audioStream.getFormat();
 
+        System.out.println(audioFormat);
+        
         DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
         try {
             sourceLine = (SourceDataLine) AudioSystem.getLine(info);
@@ -103,6 +105,6 @@ public class MakeSound {
     
     public static void main(String[] args) {
     	MakeSound m=new MakeSound();
-		m.playSound("Foster-the-People-Pumped-up-Kicks.wav");
+		m.playSound("pumped.wav");
 	}
 }
