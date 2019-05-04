@@ -8,14 +8,16 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
+
+import connection.AccountNotFoundException;
+import connection.Client;
+import connection.ExistingAccountException;
+import connection.WrongPasswordException;
  
 public class indiCliente extends Thread{
 
@@ -28,13 +30,15 @@ public class indiCliente extends Thread{
 	private AudioInputStream audioInputStream;
 	private SourceDataLine sourceDataLine;
 	private DatagramSocket socketMusica;
+	private Client client;
 	
-	public void realizarSolicitud (String cancion) {
+	public void realizarSolicitud (String cancion, Client client) {
+		this.client = client;
 		 byte[] buffer = new byte[TAMANHO_BUFF];
 		 
 	        try {
 	            //Obtengo la localizacion de localhost
-	            InetAddress direccionServidor = InetAddress.getByName("localhost");
+	            InetAddress direccionServidor = InetAddress.getByName(client.getServerIp());
 	 
 	            //Creo el socket de UDP
 	            DatagramSocket socketUDP = new DatagramSocket();
@@ -78,7 +82,7 @@ public class indiCliente extends Thread{
 	public void iniciarAudio() {
 	
 		try {	
-			System.out.println("cliente inicia a recibir cancion");
+			
 		    socketFormat = new DatagramSocket(FORMAT_PORT);
 			socketMusica = new DatagramSocket(AUDIO_PORT);
 			
@@ -90,7 +94,7 @@ public class indiCliente extends Thread{
 			while (true) {
 				DatagramPacket packetFormat = new DatagramPacket(formatBuffer, formatBuffer.length);
 				socketFormat.receive(packetFormat);
-				
+				System.out.println("cliente inicia a recibir cancion");
 				DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length);
 				socketMusica.receive(packet);
 				
@@ -117,7 +121,7 @@ public class indiCliente extends Thread{
 					sourceDataLine.start();
 					playAudio();
 				} catch (Exception e) {
-					System.out.println("erro");
+					System.out.println("error");
 				}
 
 			}
@@ -153,8 +157,16 @@ public class indiCliente extends Thread{
 	
 	public static void main(String[] args) {
 		indiCliente ic = new indiCliente();
-		ic.realizarSolicitud("RISE");
-		ic.run();
+		Client client;
+		try {
+			client = new Client("localhost", null, null, null);
+			ic.realizarSolicitud("RISE", client);
+			ic.run();
+		} catch (AccountNotFoundException | WrongPasswordException | ExistingAccountException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 }
