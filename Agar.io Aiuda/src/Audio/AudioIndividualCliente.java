@@ -40,7 +40,7 @@ public class AudioIndividualCliente extends Thread{
 	private void initiateAudio(String laCancion) {
 		try {
 			
-			InetAddress inetAddress = InetAddress.getByName(AudioServidor.IP_DATOS);
+			InetAddress inetAddress = InetAddress.getByName(AudioIndividualServidor.IP_DATOS);
 			DatagramSocket socketReq = new DatagramSocket(PORT_REQ);
 			DatagramSocket socketFormat = new DatagramSocket(AudioIndividualServidor.FORMAT_PORT);
 			DatagramSocket socketMusica= new DatagramSocket(AudioIndividualServidor.AUDIO_PORT);

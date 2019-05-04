@@ -16,9 +16,9 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class AudioIndividualServidor extends Thread{
 
-	public final static int AUDIO_PORT = 9788;
+	public final static int AUDIO_PORT = 9790;
 	public final static int FORMAT_PORT = 9789;
-	public final static String IP_DATOS = "220.1.2.7";
+	public final static String IP_DATOS = "239.1.2.2";
 	
 	private TargetDataLine targetDataLine;
 	private AudioInputStream audioStream;
@@ -28,6 +28,10 @@ public class AudioIndividualServidor extends Thread{
 	private byte formatBuffer[] = new byte[60000];
 	private DatagramSocket socketFormato ;
 	private DatagramSocket socketMusica ;
+	
+	public AudioIndividualServidor () {
+		recibirSolicitud();
+	}
 	
 	public void recibirSolicitud () {
 		try {
@@ -57,7 +61,6 @@ public class AudioIndividualServidor extends Thread{
 			e.printStackTrace();
 		}
 		 
-		byte[] buffer = new byte[256];
 		 
 	}
 
