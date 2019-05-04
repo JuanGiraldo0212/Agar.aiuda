@@ -28,7 +28,6 @@ private String nombreCancion;
 
 private AudioInputStream audioStream;
 private DatagramSocket socketMusica ;
-private DatagramSocket socketFormato ;
 private File file;
 private TargetDataLine targetDataLine;
 int puertoCliente;
@@ -50,7 +49,7 @@ private InetAddress direccionCliente;
 					formatBuffer = infoFormat.getBytes();
 					System.out.println(direccionCliente);
 					DatagramPacket packetFormat =  new DatagramPacket(formatBuffer, formatBuffer.length, direccionCliente, FORMAT_PORT);
-					socketFormato.send(packetFormat);
+					socketMusica.send(packetFormat);
 					
 					DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, direccionCliente, AUDIO_PORT);
 					socketMusica.send(packet);
@@ -69,7 +68,7 @@ private InetAddress direccionCliente;
         try {
             System.out.println("Iniciado el servidor UDP");
             //Creacion del socket
-            DatagramSocket socketUDP = new DatagramSocket(PUERTO_SERVIDOR);
+            socketMusica = new DatagramSocket(PUERTO_SERVIDOR);
  
             //Siempre atendera peticiones
             while (true) {
@@ -78,13 +77,14 @@ private InetAddress direccionCliente;
                 DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
                  
                 //Recibo el datagrama
-                socketUDP.receive(peticion);
+                socketMusica.receive(peticion);
                 System.out.println("Recibo la informacion del cliente");
                  
                 //Convierto lo recibido y mostrar el mensaje
                 String mensaje = new String(peticion.getData());
                 
-                nombreCancion = mensaje;
+               
+                nombreCancion = new String(mensaje);
                 
                 //Obtengo el puerto y la direccion de origen
                 //Sino se quiere responder, no es necesario
@@ -98,28 +98,30 @@ private InetAddress direccionCliente;
  
                 //Envio la información
                 
-                socketUDP.send(respuesta);
+                socketMusica.send(respuesta);
                 System.out.println("Envio la informacion del cliente");
-                socketUDP.close();
-                 
+                cargarCancion(nombreCancion);
             }
  
         } catch (SocketException ex) {
+        	ex.printStackTrace();
 //            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
+        	ex.printStackTrace();
 //            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
 	}
 	
-	public void cargarCancion () {
+	public void cargarCancion (String nombreCancion) {
 		try {
 			System.out.println("Cancion cargada");
-			socketMusica = new DatagramSocket(indiCliente.AUDIO_PORT);
-			socketFormato = new DatagramSocket(indiCliente.FORMAT_PORT);
 			System.out.println(nombreCancion);
-			file= new File("./Musica/"+nombreCancion+".wav");
+			String path = "./Musica/"+nombreCancion.trim()+".wav";
+			System.out.println(path);
+			file= new File(path);
 			audioStream= AudioSystem.getAudioInputStream(file);
 			setupAudio();
+			
 		} catch (SocketException e) {
 			e.printStackTrace();
 		} catch (UnsupportedAudioFileException e) {
@@ -136,6 +138,7 @@ private InetAddress direccionCliente;
 			targetDataLine = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
 			targetDataLine.open(audioFormat);
 			targetDataLine.start();
+			start();
 		} catch (Exception ex) {
 			 System.out.println(ex);
 			ex.printStackTrace();
@@ -146,9 +149,7 @@ private InetAddress direccionCliente;
 	public static void main(String[] args) {
 		indiServer is = new indiServer();
 		is.recibirSolicitud();
-		is.cargarCancion();
 		System.out.println("se cargó la canción");
-		is.run();
 	}
 
  

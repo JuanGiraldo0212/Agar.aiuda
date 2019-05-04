@@ -61,20 +61,22 @@ public class indiCliente extends Thread{
 	 
 	            //Recibo la respuesta
 	            socketUDP.receive(peticion);
-	            System.out.println("Recibo la peticion");
+	            System.out.println("Recibo la respuesta");
 	 
 	            //Cojo los datos y lo muestro
 	            mensaje = new String(peticion.getData());
 	            System.out.println(mensaje);
 	 
 	            //cierro el socket
-	            socketUDP.close();
 	 
 	        } catch (SocketException ex) {
+	        	ex.printStackTrace();
 //	            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
 	        } catch (UnknownHostException ex) {
+	        	ex.printStackTrace();
 //	            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
 	        } catch (IOException ex) {
+	        	ex.printStackTrace();
 //	            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
 	        }
 	}
@@ -160,7 +162,7 @@ public class indiCliente extends Thread{
 		Client client;
 		try {
 			client = new Client("localhost", null, null, null);
-			ic.realizarSolicitud("RISE", client);
+			ic.realizarSolicitud("Yoshi", client);
 			ic.run();
 		} catch (AccountNotFoundException | WrongPasswordException | ExistingAccountException e) {
 			// TODO Auto-generated catch block
