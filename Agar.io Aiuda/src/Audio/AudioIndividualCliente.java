@@ -46,7 +46,7 @@ public class AudioIndividualCliente extends Thread{
 			while (true) {
 				while(stop){}
 				System.out.println("solicitud");
-				DatagramPacket request = new DatagramPacket((laCancion + "," + ip).getBytes(), (laCancion + "," + ip).getBytes().length, inetAddress, AUDIO_PORT);
+				DatagramPacket request = new DatagramPacket((laCancion + "," + ip).getBytes(), (laCancion + "," + ip).getBytes().length, inetAddress, AUDIO_REQUEST_PORT);
 				socketReq.send(request);
 				System.out.println("solicitud enviada");
 							

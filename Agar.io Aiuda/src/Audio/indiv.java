@@ -6,6 +6,7 @@ public class indiv {
 			AudioIndividualServidor s = new AudioIndividualServidor();
 		
 			s.start();
+			
 		}
 	
 }

@@ -32,7 +32,7 @@ public class Server {
 	public static final String KEYSTORE_LOCATION = "./Docs/keystore.jks";
 	public static final String KEYSTORE_PASSWORD = "viejito";
 	public static final String LOG_PATH = "./Docs/Logs.txt";
-	public static final String CANCION_PREDET = "pumped.wav";
+	public static final String CANCION_PREDET = "Yoshi";
 	
 	private ServerSocket serverSocket;
 	private ServerSocket serverSocketLobby;
@@ -51,10 +51,11 @@ public class Server {
 	private GameThread gameThread;
 	private boolean startView;
 	
+	//TODO
 	private AudioServidor audioServer;
-	private AudioIndividualServidor audioIndividualServer;
-	
+	//private AudioIndividualServidor audioIndividualServer;
 	private ServidorChat servidorChat;
+	
 	
 	public Server(int wait){
 		initGameServer(wait);
@@ -80,19 +81,20 @@ public class Server {
 			serverSocketLobby=new ServerSocket(SERVER_PORT_LOBBY);
 			serverSocketGame=new ServerSocket(SERVER_PORT_GAME);
 			
-			//audioServer = new AudioServidor(CANCION_PREDET);
-			//audioServer.start();
+			audioServer = new AudioServidor(CANCION_PREDET);
+			audioServer.start();
 			
 			asignationThread = new AsignationThread(this);
 			asignationThread.start();
 			timerThread=new TimerThread(asignationThread, wait);
 			gameThread=new GameThread(this, 30);
 			
-			audioIndividualServer = new AudioIndividualServidor();
-			audioIndividualServer.start();
+			//TODO
+//			audioIndividualServer = new AudioIndividualServidor();
+//			audioIndividualServer.start();
 			
 			servidorChat = new ServidorChat();
-		
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

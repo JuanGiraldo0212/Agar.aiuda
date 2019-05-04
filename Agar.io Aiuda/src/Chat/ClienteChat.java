@@ -1,5 +1,6 @@
 package Chat;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -34,6 +35,7 @@ public class ClienteChat extends JPanel{
     private String usuario;
     
     public ClienteChat(String nick) {
+    	PropertyConfigurator.configure("log4j.properties"); 
     	// Elementos de la ventana
         mensajesChat = new JTextArea();
         mensajesChat.setEnabled(false); // El area de mensajes del chat no se debe de poder editar
@@ -43,42 +45,17 @@ public class ClienteChat extends JPanel{
         JTextField tfMensaje = new JTextField("");
         JButton btEnviar = new JButton("Enviar");
         
-        // Colocacion de los componentes en la ventana
-        setLayout(new GridBagLayout());
         
-        GridBagConstraints gbc = new GridBagConstraints();
+        setLayout(new BorderLayout());
+        add(scrollMensajesChat, BorderLayout.CENTER);
         
-        gbc.insets = new Insets(20, 20, 20, 20);
+        JPanel jp1 = new JPanel();
+        jp1.setLayout(new GridLayout(1,2));
+        jp1.add(tfMensaje);
+        jp1.add(btEnviar);
         
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        gbc.fill = GridBagConstraints.BOTH;
-        add(scrollMensajesChat, gbc);
-        
-     // Restaura valores por defecto
-        gbc.gridwidth = 1;        
-        gbc.weighty = 0;
-        
-        gbc.fill = GridBagConstraints.HORIZONTAL;        
-        gbc.insets = new Insets(0, 20, 20, 20);
-        
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        add(tfMensaje, gbc);
-        
-     // Restaura valores por defecto
-        gbc.weightx = 0;
-        
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        add(btEnviar, gbc);
-        
-        this.setBounds(400, 100, 400, 500);
-        this.setVisible(true);
-        
+        add(jp1, BorderLayout.SOUTH);
+     
      // configuracion inicial
         
          host = ServidorChat.elHost;
@@ -135,6 +112,7 @@ public class ClienteChat extends JPanel{
      * @param args the command line arguments
      */
     //TODO
+    /*
     public static void main(String[] args) {
         // Carga el archivo de configuracion de log4J
         PropertyConfigurator.configure("log4j.properties");        
@@ -147,5 +125,5 @@ public class ClienteChat extends JPanel{
         
         c.recibirMensajesServidor();
     }
-    
+    */
 }

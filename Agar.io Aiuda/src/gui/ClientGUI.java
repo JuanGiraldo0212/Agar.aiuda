@@ -28,7 +28,6 @@ public class ClientGUI extends JFrame implements ActionListener{
 	public final static String SIGN_IN ="Sign In";
 
 	private Client client;
-	private ClienteChat chatPane;
 	private LobbyThread lobbyThread;
 	private Draw draw;
 	private JPanel aux;
@@ -40,13 +39,15 @@ public class ClientGUI extends JFrame implements ActionListener{
 	private LobbyPane lobby;
 	private Game game; 
 	//private Client client;
-
+	//TODO
+	private ClienteChat chatPane;
+	private MusicPane panelMusica;
 	
 
 	public ClientGUI() {
 		setTitle("Agar.io");
 		setLayout(new BorderLayout());
-		setResizable(false);
+		setResizable(true);
 		//draw=new Draw(this);
 		//add(draw);
 		first=new JPanel();
@@ -67,6 +68,7 @@ public class ClientGUI extends JFrame implements ActionListener{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		pack();
+//		setSize(400, 200);
 	}
 
 	
@@ -159,7 +161,18 @@ public class ClientGUI extends JFrame implements ActionListener{
 			}
 			game.setArrFood(arrFood);
 			draw=new Draw(this);
+			
+			//TODO
+			//La clase Audio server es la que indica la musica disponible para pasarla a panelMusica
 			chatPane = new ClienteChat(client.getNick());
+			
+			String[] Canciones = new String[4];
+			Canciones[0] = "Legends Never Die";
+			Canciones[1] = "pumped";
+			Canciones[2] = "RISE";
+			Canciones[3] = "Yoshi";
+			panelMusica = new MusicPane(Canciones,this);
+			
 			if(client.getType().equals(Client.TYPE_PLAYER)) {
 				
 				remove(lobby);
@@ -168,9 +181,18 @@ public class ClientGUI extends JFrame implements ActionListener{
 				remove(first);
 			}
 			add(draw,BorderLayout.CENTER);
-			add(chatPane, BorderLayout.NORTH);
+			
+			JPanel jp1 = new JPanel();
+			jp1.setLayout(new BorderLayout());
+			
+			jp1.add(chatPane, BorderLayout.CENTER);
+			jp1.add(panelMusica, BorderLayout.SOUTH);
+			
+			add(jp1, BorderLayout.EAST);
+			chatPane.recibirMensajesServidor();
+			
 			pack();
-			setSize(new Dimension(1000,1000));
+			setSize(1000,2000);
 		}
 		else {
 			ArrayList<Player> jugadores=game.getPlayers();

@@ -15,10 +15,6 @@ import javax.sound.sampled.TargetDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class AudioIndividualServidor extends Thread{
-
-	public final static int AUDIO_PORT = 9790;
-	public final static int FORMAT_PORT = 9789;
-	public final static int AUDIO_REQUEST_PORT = 50911;
 	
 	private String ipClient;
 	private TargetDataLine targetDataLine;
@@ -37,12 +33,12 @@ public class AudioIndividualServidor extends Thread{
 	
 	public void recibirSolicitud () {
 		try {
-			
-			socketReq = new DatagramSocket(AUDIO_REQUEST_PORT);
+			socketReq = new DatagramSocket(AudioIndividualCliente.AUDIO_REQUEST_PORT);
 			byte[] reqBuffer = new byte[60000];
+			
+			System.out.println("server recibe solicitud");
 			DatagramPacket request = new DatagramPacket(reqBuffer, reqBuffer.length);
 			socketReq.receive(request);
-			System.out.println("server recibe solicitud");
 			byte[]reqData = request.getData();
 			String[] infoReq = new String(reqData).split(",");
 			System.out.println("server tranformó solicitud");
@@ -50,6 +46,7 @@ public class AudioIndividualServidor extends Thread{
 			file = new File("./Musica/"+infoReq[0]+".wav");
 			ipClient = infoReq[1];
 			audioStream = AudioSystem.getAudioInputStream(file);
+			System.out.println("Canción construida");
 			
 			setupAudio();
 		} catch (SocketException e) {
@@ -90,10 +87,10 @@ public class AudioIndividualServidor extends Thread{
 					String infoFormat = audioStream.getFormat().getSampleRate()+" "+audioStream.getFormat().getSampleSizeInBits()+" "+audioStream.getFormat().getChannels();
 					formatBuffer = infoFormat.getBytes();
 					
-					DatagramPacket packetFormat =  new DatagramPacket(formatBuffer, formatBuffer.length, inetAddress, FORMAT_PORT);
+					DatagramPacket packetFormat =  new DatagramPacket(formatBuffer, formatBuffer.length, inetAddress,AudioIndividualCliente.FORMAT_PORT);
 					socketFormato.send(packetFormat);
 					
-					DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, inetAddress, AUDIO_PORT);
+					DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, inetAddress, AudioIndividualCliente.AUDIO_PORT);
 					socketMusica.send(packet);
 					sleep(AudioCliente.TIME_SLEEP);
 				}
@@ -102,6 +99,8 @@ public class AudioIndividualServidor extends Thread{
 			// TODO: handle exception
 		}
 	}
+	
+	
 	
 	@Override
 	public void run() {
