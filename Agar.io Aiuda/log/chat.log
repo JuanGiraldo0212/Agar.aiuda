@@ -675,3 +675,12 @@
 2013-04-01 01:28:22,000 [Thread-2] INFO  servidorchat.ConexionCliente - Cliente con la IP 127.0.0.1 desconectado.
 2013-04-01 01:28:23,373 [Thread-0] INFO  servidorchat.ConexionCliente - Cliente con la IP 127.0.0.1 desconectado.
 2013-04-01 01:28:27,819 [Thread-8] INFO  servidorchat.ConexionCliente - Cliente con la IP 127.0.0.1 desconectado.
+2019-05-03 18:14:58,077 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-03 18:15:29,664 [main] INFO  Chat.ClienteChat - Quieres conectarte a localhost en el puerto 1234 con el nombre de ususario: rodri.
+2019-05-03 18:15:29,729 [main] INFO  Chat.ServidorChat - Cliente con la IP 127.0.0.1 conectado.
+2019-05-03 18:15:29,736 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-03 18:15:46,989 [main] INFO  Chat.ClienteChat - Quieres conectarte a localhost en el puerto 1234 con el nombre de ususario: juan diego.
+2019-05-03 18:15:47,033 [main] INFO  Chat.ServidorChat - Cliente con la IP 127.0.0.1 conectado.
+2019-05-03 18:15:47,033 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-03 18:16:12,826 [main] ERROR Chat.ClienteChat - Error al leer del stream de entrada: Connection reset
+2019-05-03 18:16:12,826 [main] ERROR Chat.ClienteChat - Error al leer del stream de entrada: Connection reset

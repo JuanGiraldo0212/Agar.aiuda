@@ -139,7 +139,7 @@ public class ClienteChat extends JPanel{
         // Carga el archivo de configuracion de log4J
         PropertyConfigurator.configure("log4j.properties");        
               
-        ClienteChat c = new ClienteChat("rodri");
+        ClienteChat c = new ClienteChat("juan diego");
         
         JFrame pan = new JFrame();
         pan.add(c);

@@ -29,6 +29,7 @@ public class AudioServidor extends Thread {
 	private DatagramSocket socketMusica ;
 	private DatagramSocket socketFormato ;
 	private File file;
+	private String[]Canciones;
 	
 	public void run() {
 		broadcastAudio();
@@ -38,7 +39,7 @@ public class AudioServidor extends Thread {
 		try {
 			socketMusica = new DatagramSocket();
 			socketFormato = new DatagramSocket();
-			file= new File("./Musica/"+song);
+			file= new File("./Musica/"+song+".wav");
 			audioStream= AudioSystem.getAudioInputStream(file);
 			setupAudio();
 		} catch (SocketException e) {
@@ -75,6 +76,11 @@ public class AudioServidor extends Thread {
 
 	public void setupAudio() {
 		try {
+			Canciones = new String[4];
+			Canciones[0] = "Legends Never Die";
+			Canciones[1] = "pumped";
+			Canciones[2] = "RISE";
+			Canciones[3] = "Yoshi";
 			AudioFormat audioFormat =audioStream.getFormat();
 			DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
 			targetDataLine = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
@@ -87,4 +93,14 @@ public class AudioServidor extends Thread {
 		}
 	}
 
+	public String[] getCanciones() {
+		return Canciones;
+	}
+
+	public void setCanciones(String[] canciones) {
+		Canciones = canciones;
+	}
+
+	
+	
 }
