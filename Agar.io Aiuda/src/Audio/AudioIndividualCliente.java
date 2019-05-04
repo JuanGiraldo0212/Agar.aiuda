@@ -11,41 +11,42 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
 
+import connection.Client;
+
 public class AudioIndividualCliente extends Thread{
 	
-	String song;
-	
-	public AudioIndividualCliente(String cancion) {
-		song = cancion;
-	}
-	
-	public final static int PORT_REQ = 9788;
+	public final static int AUDIO_PORT = 9790;
+	public final static int FORMAT_PORT = 9789;
+	public final static int AUDIO_REQUEST_PORT = 50911;
+	private String song;
 	private AudioInputStream audioInputStream;
 	private SourceDataLine sourceDataLine;
-//	private MulticastSocket socketMusica;
-//	private MulticastSocket socketFormat;
-//	private MulticastSocket socketReq;
-	String hostname;
+	private boolean stop;
+	private Client client;
 	
-	public AudioIndividualCliente() {
-
+	public AudioIndividualCliente(String cancion, Client client)
+	{
+		this.client = client;
+		song = cancion;
+		stop = true;
 	}
 
 	private void initiateAudio(String laCancion) {
 		try {
 			
-			InetAddress inetAddress = InetAddress.getByName(AudioIndividualServidor.IP_DATOS);
-			DatagramSocket socketReq = new DatagramSocket(PORT_REQ);
-			DatagramSocket socketFormat = new DatagramSocket(AudioIndividualServidor.FORMAT_PORT);
-			DatagramSocket socketMusica= new DatagramSocket(AudioIndividualServidor.AUDIO_PORT);
+			InetAddress inetAddress = InetAddress.getByName(client.getServerIp());
+			DatagramSocket socketReq = new DatagramSocket(AUDIO_REQUEST_PORT);
+			DatagramSocket socketFormat = new DatagramSocket(FORMAT_PORT);
+			DatagramSocket socketMusica= new DatagramSocket(AUDIO_PORT);
 			
 			byte[] audioBuffer = new byte[60000];
 			byte[] formatBuffer = new byte[60000];
 			
+			String ip = InetAddress.getLocalHost().getHostAddress();
 			while (true) {
-				
+				while(stop){}
 				System.out.println("solicitud");
-				DatagramPacket request = new DatagramPacket(laCancion.getBytes(), laCancion.getBytes().length, inetAddress, PORT_REQ);
+				DatagramPacket request = new DatagramPacket((laCancion + "," + ip).getBytes(), (laCancion + "," + ip).getBytes().length, inetAddress, AUDIO_PORT);
 				socketReq.send(request);
 				System.out.println("solicitud enviada");
 							
@@ -96,7 +97,9 @@ public class AudioIndividualCliente extends Thread{
 		byte[] buffer = new byte[60000];
 		try {
 			int count;
-			while ((count = audioInputStream.read(buffer, 0, buffer.length)) != -1) {
+			while ((count = audioInputStream.read(buffer, 0, buffer.length)) != -1) 
+			{
+				while(stop){}
 				if (count > 0) {
 					sleep(AudioCliente.TIME_SLEEP);
 					sourceDataLine.write(buffer, 0, count);		
@@ -108,7 +111,49 @@ public class AudioIndividualCliente extends Thread{
 	
 	@Override
 	public void run() {
+		stop = false;
 		initiateAudio(song);
+		
+	}
+
+	public String getSong() {
+		return song;
+	}
+
+	public void setSong(String song) {
+		this.song = song;
+	}
+
+	public AudioInputStream getAudioInputStream() {
+		return audioInputStream;
+	}
+
+	public void setAudioInputStream(AudioInputStream audioInputStream) {
+		this.audioInputStream = audioInputStream;
+	}
+
+	public SourceDataLine getSourceDataLine() {
+		return sourceDataLine;
+	}
+
+	public void setSourceDataLine(SourceDataLine sourceDataLine) {
+		this.sourceDataLine = sourceDataLine;
+	}
+
+	public boolean isStop() {
+		return stop;
+	}
+
+	public void setStop(boolean stop) {
+		this.stop = stop;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
 	}
 	
 }

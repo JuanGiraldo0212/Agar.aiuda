@@ -9,39 +9,53 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Audio.AudioIndividualCliente;
+import connection.AccountNotFoundException;
+import connection.Client;
+import connection.ExistingAccountException;
+import connection.WrongPasswordException;
+
 public class MusicPane extends JPanel implements ActionListener{
 
 	public final static String STOP = "pausa";
 	public final static String START = "iniciar";
 	
+	private ClientGUI clientGUI;
 	private JComboBox<String> jcCanciones;
-	private JButton jbPausa;
-	private JButton jbIniciar;
+	private JButton jbControl;
+
 	
-	public MusicPane (String[] canciones) {
+	public MusicPane (String[] canciones, ClientGUI clientGUI) {
 		
+		this.clientGUI = clientGUI;
 		setLayout(new GridLayout(1,2));
-		jcCanciones = new JComboBox<String>(canciones);
-		jbPausa = new JButton("||");
-		jbIniciar = new JButton("Escuchar");
-		
-		JPanel jp1 = new JPanel();
-		jp1.setLayout(new GridLayout(1,2));
-		jp1.add(jbPausa);
-		jp1.add(jbIniciar);
-		
+		jcCanciones = new JComboBox<>(canciones);
+		jbControl = new JButton("►");
+		jbControl.setActionCommand(START);
+		jbControl.addActionListener(this);
+
 		add(jcCanciones);
-		add(jp1);
+		add(jbControl);
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent evento) {
 		String e = evento.getActionCommand();
-		if(e.equals(STOP)) {
-			
-		}else if (e.equals(START)) {
-			
+		if(e.equals(STOP)) 
+		{
+			jbControl.setText("►");
+			jbControl.setActionCommand(START);
+			clientGUI.getClient().getAudioIndividualCliente().setStop(true);
+		}
+		else if (e.equals(START)) 
+		{
+			jbControl.setText("||");
+			jbControl.setActionCommand(STOP);
+			clientGUI.getClient().setAudioIndividualCliente(new AudioIndividualCliente(jcCanciones.getSelectedItem()+"", clientGUI.getClient()));
+			clientGUI.getClient().getAudioIndividualCliente().start();
+			clientGUI.getClient().getAudioIndividualCliente().setStop(false);
+
 		}
 		
 	}
@@ -56,10 +70,22 @@ public class MusicPane extends JPanel implements ActionListener{
 		Canciones[1] = "pumped";
 		Canciones[2] = "RISE";
 		Canciones[3] = "Yoshi";
-		MusicPane ms = new MusicPane(Canciones);
+		Client client;
+		try {
+			client = new Client(null, null, null, null);
+			client.setServerIp("localhost");
+			ClientGUI clientgui = new ClientGUI();
+			clientgui.setClient(client);
+			MusicPane ms = new MusicPane(Canciones, clientgui);
+			fra.add(ms);
+			fra.setVisible(true);
+		} catch (AccountNotFoundException | WrongPasswordException | ExistingAccountException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		fra.add(ms);
-		fra.setVisible(true);
+		
+		
 	}
 	
 

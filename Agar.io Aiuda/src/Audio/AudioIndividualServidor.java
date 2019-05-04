@@ -18,8 +18,9 @@ public class AudioIndividualServidor extends Thread{
 
 	public final static int AUDIO_PORT = 9790;
 	public final static int FORMAT_PORT = 9789;
-	public final static String IP_DATOS = "239.1.2.2";
+	public final static int AUDIO_REQUEST_PORT = 50911;
 	
+	private String ipClient;
 	private TargetDataLine targetDataLine;
 	private AudioInputStream audioStream;
 	private DatagramSocket socketReq;
@@ -29,24 +30,25 @@ public class AudioIndividualServidor extends Thread{
 	private DatagramSocket socketFormato ;
 	private DatagramSocket socketMusica ;
 	
-	public AudioIndividualServidor () {
+	public AudioIndividualServidor () 
+	{
 		recibirSolicitud();
 	}
 	
 	public void recibirSolicitud () {
 		try {
-			System.out.println("server recibe solicitud");
-			socketReq = new DatagramSocket(AudioIndividualCliente.PORT_REQ);
 			
+			socketReq = new DatagramSocket(AUDIO_REQUEST_PORT);
 			byte[] reqBuffer = new byte[60000];
 			DatagramPacket request = new DatagramPacket(reqBuffer, reqBuffer.length);
 			socketReq.receive(request);
-			
+			System.out.println("server recibe solicitud");
 			byte[]reqData = request.getData();
-			String infoReq = new String(reqData);
+			String[] infoReq = new String(reqData).split(",");
 			System.out.println("server tranformó solicitud");
 			
-			file = new File("./Musica/"+infoReq+".wav");
+			file = new File("./Musica/"+infoReq[0]+".wav");
+			ipClient = infoReq[1];
 			audioStream = AudioSystem.getAudioInputStream(file);
 			
 			setupAudio();
@@ -80,7 +82,7 @@ public class AudioIndividualServidor extends Thread{
 	
 	public void mandarAudio() {
 		try {
-			InetAddress inetAddress = InetAddress.getByName(IP_DATOS);
+			InetAddress inetAddress = InetAddress.getByName(ipClient);
 			while(true) {
 				int count = audioStream.read(audioBuffer, 0, audioBuffer.length);
 				if (count > 0) {

@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
 
+import Chat.ClienteChat;
 import connection.AccountNotFoundException;
 import connection.Client;
 import connection.ExistingAccountException;
@@ -27,6 +28,7 @@ public class ClientGUI extends JFrame implements ActionListener{
 	public final static String SIGN_IN ="Sign In";
 
 	private Client client;
+	private ClienteChat chatPane;
 	private LobbyThread lobbyThread;
 	private Draw draw;
 	private JPanel aux;
@@ -157,6 +159,7 @@ public class ClientGUI extends JFrame implements ActionListener{
 			}
 			game.setArrFood(arrFood);
 			draw=new Draw(this);
+			chatPane = new ClienteChat(client.getNick());
 			if(client.getType().equals(Client.TYPE_PLAYER)) {
 				
 				remove(lobby);
@@ -165,6 +168,7 @@ public class ClientGUI extends JFrame implements ActionListener{
 				remove(first);
 			}
 			add(draw,BorderLayout.CENTER);
+			add(chatPane, BorderLayout.NORTH);
 			pack();
 			setSize(new Dimension(1000,1000));
 		}
