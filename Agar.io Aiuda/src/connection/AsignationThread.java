@@ -4,8 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.sql.DatabaseMetaData;
-
 import model.Player;
 
 public class AsignationThread extends Thread{
@@ -42,7 +40,7 @@ public class AsignationThread extends Thread{
 							out.writeUTF("ExistingAccountException");
 							socket.close();
 						}
-						else
+						else if(registration.equals("You're registered"))
 						{
 							server.getPlayersSockets().add(socket);
 							System.out.println("Se conecto: "+userData[0]);

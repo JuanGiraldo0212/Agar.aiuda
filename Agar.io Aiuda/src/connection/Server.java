@@ -2,18 +2,12 @@ package connection;
 
 import java.awt.Color;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.DataOutput;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -192,7 +186,7 @@ public class Server {
 		{
 			File logs = new File(LOG_PATH);
 			PrintWriter pw = new PrintWriter(new FileWriter(logs, true));
-			pw.write(email + "," + password + "," + nickname + "\n");
+			pw.write(nickname + "," + email + "," + password + "\n");
 			pw.flush();
 			pw.close();
 			result = "You're registered";

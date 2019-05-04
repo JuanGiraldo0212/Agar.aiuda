@@ -1,13 +1,9 @@
 package model;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
-
-import javax.swing.text.PlainDocument;
 
 
 public class Game implements Serializable {

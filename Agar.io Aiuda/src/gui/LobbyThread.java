@@ -2,11 +2,7 @@ package gui;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-
 import connection.Client;
-import connection.Server;
-import connection.TimerThread;
 
 public class LobbyThread extends Thread{
 

@@ -1,7 +1,5 @@
 package connection;
 
-import java.io.IOException;
-
 public class TimerThread extends Thread{
 	private int time;
 	private int wait;

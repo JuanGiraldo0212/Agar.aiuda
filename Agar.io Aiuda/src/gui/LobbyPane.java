@@ -1,14 +1,9 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
-
-import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.ListModel;
 
 public class LobbyPane extends JPanel{
 	private JLabel lblPlayers;
