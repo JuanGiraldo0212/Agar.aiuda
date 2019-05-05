@@ -10,6 +10,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
  
@@ -139,9 +140,11 @@ private InetAddress direccionCliente;
 			targetDataLine.open(audioFormat);
 			targetDataLine.start();
 			start();
-		} catch (Exception ex) {
-			 System.out.println(ex);
-			ex.printStackTrace();
+		} catch (IllegalThreadStateException ex) {
+			
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 			System.exit(0);
 		}
 	}
