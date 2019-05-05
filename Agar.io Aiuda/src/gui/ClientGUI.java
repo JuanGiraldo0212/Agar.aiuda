@@ -162,34 +162,47 @@ public class ClientGUI extends JFrame implements ActionListener{
 			game.setArrFood(arrFood);
 			draw=new Draw(this);
 			
+			
 			//TODO
 			//La clase Audio server es la que indica la musica disponible para pasarla a panelMusica
-			chatPane = new ClienteChat(client.getNick());
 			
-			String[] Canciones = new String[4];
-			Canciones[0] = "Legends Never Die";
-			Canciones[1] = "pumped";
-			Canciones[2] = "RISE";
-			Canciones[3] = "Yoshi";
-			panelMusica = new MusicPane(Canciones,this);
 			
-			if(client.getType().equals(Client.TYPE_PLAYER)) {
-				
+			
+			
+			if(client.getType().equals(Client.TYPE_PLAYER)) 
+			{
+				chatPane = new ClienteChat(client.getNick());
+				String[] Canciones = new String[4];
+				Canciones[0] = "Legends Never Die";
+				Canciones[1] = "pumped";
+				Canciones[2] = "RISE";
+				Canciones[3] = "Yoshi";
+				panelMusica = new MusicPane(Canciones,this);
 				remove(lobby);
+				add(draw,BorderLayout.CENTER);
+				add(panelMusica, BorderLayout.NORTH);
 			}
-			else {
+			else 
+			{
+				chatPane = new ClienteChat(client.getNick());
+				String[] Canciones = new String[4];
+				Canciones[0] = "Legends Never Die";
+				Canciones[1] = "pumped";
+				Canciones[2] = "RISE";
+				Canciones[3] = "Yoshi";
+				panelMusica = new MusicPane(Canciones,this);
 				remove(first);
+				add(draw,BorderLayout.CENTER);
+				
+				JPanel jp1 = new JPanel();
+				jp1.setLayout(new BorderLayout());
+				
+				jp1.add(chatPane, BorderLayout.CENTER);
+				jp1.add(panelMusica, BorderLayout.SOUTH);
+				
+				add(jp1, BorderLayout.EAST);
+				chatPane.recibirMensajesServidor();
 			}
-			add(draw,BorderLayout.CENTER);
-			
-			JPanel jp1 = new JPanel();
-			jp1.setLayout(new BorderLayout());
-			
-			jp1.add(chatPane, BorderLayout.CENTER);
-			jp1.add(panelMusica, BorderLayout.SOUTH);
-			
-			add(jp1, BorderLayout.EAST);
-			chatPane.recibirMensajesServidor();
 			
 			pack();
 			setSize(1000,2000);

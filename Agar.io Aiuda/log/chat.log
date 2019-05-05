@@ -746,3 +746,17 @@
 2019-05-04 21:56:46,349 [Thread-5] ERROR Chat.ClienteConexionServidorChat - El socket no se creo correctamente. 
 2019-05-04 21:56:46,415 [Thread-5] ERROR Chat.ClienteChat - El socket no se creo correctamente. 
 2019-05-04 21:56:46,415 [Thread-5] ERROR Chat.ClienteChat - El socket no se creo correctamente. 
+2019-05-04 22:52:49,059 [Thread-5] INFO  Chat.ClienteChat - Quieres conectarte a localhost en el puerto 1234 con el nombre de ususario: juan.
+2019-05-04 22:52:50,133 [Thread-5] ERROR Chat.ClienteChat - No se ha podido conectar con el servidor (Connection refused: connect).
+2019-05-04 22:52:50,138 [Thread-5] ERROR Chat.ClienteConexionServidorChat - El socket no se creo correctamente. 
+2019-05-04 22:55:14,708 [Thread-5] INFO  Chat.ClienteChat - Quieres conectarte a localhost en el puerto 1234 con el nombre de ususario: juan.
+2019-05-04 22:55:15,714 [Thread-5] ERROR Chat.ClienteChat - No se ha podido conectar con el servidor (Connection refused: connect).
+2019-05-04 22:55:15,723 [Thread-5] ERROR Chat.ClienteConexionServidorChat - El socket no se creo correctamente. 
+2019-05-04 22:57:34,135 [Thread-4] INFO  Chat.ClienteChat - Quieres conectarte a localhost en el puerto 1234 con el nombre de ususario: juan.
+2019-05-04 22:57:35,189 [Thread-4] ERROR Chat.ClienteChat - No se ha podido conectar con el servidor (Connection refused: connect).
+2019-05-04 22:57:35,191 [Thread-4] ERROR Chat.ClienteConexionServidorChat - El socket no se creo correctamente. 
+2019-05-04 22:59:10,873 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-04 22:59:29,372 [Thread-5] INFO  Chat.ClienteChat - Quieres conectarte a localhost en el puerto 1234 con el nombre de ususario: juan.
+2019-05-04 22:59:29,379 [main] INFO  Chat.ServidorChat - Cliente con la IP icesi.edu.co conectado.
+2019-05-04 22:59:29,411 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-04 22:59:37,542 [Thread-8] INFO  Chat.ServerConexionClienteChat - Cliente con la IP icesi.edu.co desconectado.

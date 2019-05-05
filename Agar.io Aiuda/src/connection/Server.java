@@ -81,16 +81,16 @@ public class Server {
 			serverSocketLobby=new ServerSocket(SERVER_PORT_LOBBY);
 			serverSocketGame=new ServerSocket(SERVER_PORT_GAME);
 			
-//			audioServer = new AudioServidor(CANCION_PREDET);
-//			audioServer.start();
+			audioServer = new AudioServidor(CANCION_PREDET);
+			audioServer.start();
 			
 			asignationThread = new AsignationThread(this);
 			asignationThread.start();
 			timerThread=new TimerThread(asignationThread, wait);
 			gameThread=new GameThread(this, 30);
 			
-			audioIndividualServer = new IndividualAudioServer();
-			audioIndividualServer.recibirSolicitud();
+//			audioIndividualServer = new IndividualAudioServer();
+//			audioIndividualServer.recibirSolicitud();
 			
 			servidorChat = new ServidorChat();
 			
