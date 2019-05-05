@@ -17,6 +17,7 @@ import javax.net.ssl.SSLServerSocketFactory;
 import Audio.AudioServidor;
 import Audio.IndividualAudioCliente;
 import Audio.IndividualAudioServer;
+import Audio.IndividualMusicRequestServer;
 import Chat.ServidorChat;
 import gui.GameThread;
 import model.Ball;
@@ -55,7 +56,7 @@ public class Server {
 	
 	private AudioServidor audioServer;
 	private ArrayList<IndividualAudioServer> audioIndividualServerThreads;
-	
+	private IndividualMusicRequestServer musicRequestServer;
 	private ServidorChat servidorChat;
 	
 	
@@ -95,7 +96,9 @@ public class Server {
 			
 //			audioIndividualServer = new IndividualAudioServer();
 //			audioIndividualServer.recibirSolicitud();
-			
+			serverSocketMusica = new DatagramSocket(IndividualMusicRequestServer.PUERTO_SERVIDOR);
+			musicRequestServer = new IndividualMusicRequestServer(this);
+			musicRequestServer.start();
 			servidorChat = new ServidorChat();
 			
 		} catch (IOException e) {

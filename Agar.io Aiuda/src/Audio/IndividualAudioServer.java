@@ -21,8 +21,8 @@ import connection.Server;
 public class IndividualAudioServer extends Thread{
 
 	public final static int PUERTO_SERVIDOR = 5000;
-	public final static int FORMAT_PORT = 9786;
-	public final static int AUDIO_PORT = 9787;
+	public final static int FORMAT_PORT = 9781;
+	public final static int AUDIO_PORT = 9782;
 	public final static int TIME_SLEEP = 300;
 	public final static int TAMANHO_BUFF = 60000;
 	
@@ -30,27 +30,33 @@ public class IndividualAudioServer extends Thread{
 	private byte formatBuffer[] = new byte[60000];	
 	
 	private Server server;
-	private String nombreCancion;
 	private AudioInputStream audioStream;
 	private File file;
 	private TargetDataLine targetDataLine;
+	private boolean isPlaying;
+	private String nombreCancion;
 	int puertoCliente;
 	private InetAddress direccionCliente;
-	private boolean isPlaying;
-
-	public IndividualAudioServer(Server server) 
+	
+	public IndividualAudioServer(Server server, String nombreCancion, int puertoCliente, InetAddress direccionCliente) 
 	{
 		this.server = server;
+		isPlaying = false;
+		this.nombreCancion = nombreCancion;
+		this.puertoCliente = puertoCliente;
+		this.direccionCliente = direccionCliente;
+		cargarCancion(nombreCancion);
 	}
 	@Override
 	public void run() {
+		isPlaying = true;
 		indiAudio();
 	}
 
 	public void indiAudio() {
 		try {		
 			System.out.println("server inicia transmision musica");
-			while (true) {
+			while (isPlaying) {
 				int count = audioStream.read(audioBuffer, 0, audioBuffer.length);
 				if (count > 0) {
 					
@@ -66,7 +72,7 @@ public class IndividualAudioServer extends Thread{
 				}
 			}
 		} catch (Exception ex) {
-			 System.out.println(ex);
+			 ex.printStackTrace();
 		}
 	}
 
@@ -98,7 +104,6 @@ public class IndividualAudioServer extends Thread{
 			targetDataLine = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
 			targetDataLine.open(audioFormat);
 			targetDataLine.start();
-			start();
 		} catch (IllegalThreadStateException ex) {
 			
 		} catch (LineUnavailableException e) {
@@ -107,12 +112,65 @@ public class IndividualAudioServer extends Thread{
 			System.exit(0);
 		}
 	}
-
-	public static void main(String[] args) {
-		IndividualAudioServer is = new IndividualAudioServer(null);
-		is.recibirSolicitud();
-		System.out.println("se cargó la canción");
+	public byte[] getAudioBuffer() {
+		return audioBuffer;
 	}
-
- 
+	public void setAudioBuffer(byte[] audioBuffer) {
+		this.audioBuffer = audioBuffer;
+	}
+	public byte[] getFormatBuffer() {
+		return formatBuffer;
+	}
+	public void setFormatBuffer(byte[] formatBuffer) {
+		this.formatBuffer = formatBuffer;
+	}
+	public Server getServer() {
+		return server;
+	}
+	public void setServer(Server server) {
+		this.server = server;
+	}
+	public AudioInputStream getAudioStream() {
+		return audioStream;
+	}
+	public void setAudioStream(AudioInputStream audioStream) {
+		this.audioStream = audioStream;
+	}
+	public File getFile() {
+		return file;
+	}
+	public void setFile(File file) {
+		this.file = file;
+	}
+	public TargetDataLine getTargetDataLine() {
+		return targetDataLine;
+	}
+	public void setTargetDataLine(TargetDataLine targetDataLine) {
+		this.targetDataLine = targetDataLine;
+	}
+	public boolean isPlaying() {
+		return isPlaying;
+	}
+	public void setPlaying(boolean isPlaying) {
+		this.isPlaying = isPlaying;
+	}
+	public String getNombreCancion() {
+		return nombreCancion;
+	}
+	public void setNombreCancion(String nombreCancion) {
+		this.nombreCancion = nombreCancion;
+	}
+	public int getPuertoCliente() {
+		return puertoCliente;
+	}
+	public void setPuertoCliente(int puertoCliente) {
+		this.puertoCliente = puertoCliente;
+	}
+	public InetAddress getDireccionCliente() {
+		return direccionCliente;
+	}
+	public void setDireccionCliente(InetAddress direccionCliente) {
+		this.direccionCliente = direccionCliente;
+	}
+	
 }

@@ -1,8 +1,15 @@
 package Audio;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.InetAddress;
 import java.net.SocketException;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.TargetDataLine;
+
+import connection.Server;
 
 public class IndividualMusicRequestServer extends Thread {
 	
@@ -14,9 +21,13 @@ public class IndividualMusicRequestServer extends Thread {
 	
 	private byte audioBuffer[] = new byte[60000];
 	private byte formatBuffer[] = new byte[60000];	
-	public IndividualMusicRequestServer()
+	
+	private Server server;
+
+	
+	public IndividualMusicRequestServer(Server server)
 	{
-		
+		this.server = server;
 	}
 	
 	@Override
@@ -30,7 +41,6 @@ public class IndividualMusicRequestServer extends Thread {
             	byte[] buffer = new byte[TAMANHO_BUFF];
             	                //Preparo la respuesta
                 DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
-                 
                 //Recibo el datagrama
                 server.getServerSocketMusica().receive(peticion);
                 System.out.println("Recibo la informacion del cliente");
@@ -39,15 +49,24 @@ public class IndividualMusicRequestServer extends Thread {
                 String mensaje = new String(peticion.getData());
                 
                
-                nombreCancion = new String(mensaje);
+                String nombreCancion = new String(mensaje);
                 
                 //Obtengo el puerto y la direccion de origen
                 //Sino se quiere responder, no es necesario
-                puertoCliente = peticion.getPort();
-                direccionCliente = peticion.getAddress();                
+                int puertoCliente = peticion.getPort();
+                InetAddress direccionCliente = peticion.getAddress();                
                 String respuesta = "preparamos: "+mensaje;
                 buffer = respuesta.getBytes();
- 
+                
+                for (IndividualAudioServer audioThread : server.getAudioIndividualServerThreads()) 
+                {
+					if(audioThread.getDireccionCliente().equals(direccionCliente))
+					{
+						audioThread.setPlaying(false);
+						audioThread.getTargetDataLine().close();
+					}
+				}
+                
                 //creo el datagrama
                 DatagramPacket paqueterespuesta = new DatagramPacket(buffer, buffer.length, direccionCliente, puertoCliente);
  
@@ -55,7 +74,10 @@ public class IndividualMusicRequestServer extends Thread {
                 
                 server.getServerSocketMusica().send(paqueterespuesta);
                 System.out.println("Envio la informacion del cliente");
-                cargarCancion(nombreCancion);
+                IndividualAudioServer audio = new IndividualAudioServer(server, nombreCancion, puertoCliente, direccionCliente);
+                server.getAudioIndividualServerThreads().add(audio);
+                audio.start();
+             
             }
  
         } catch (SocketException ex) {
