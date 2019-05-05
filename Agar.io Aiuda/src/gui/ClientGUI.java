@@ -171,7 +171,6 @@ public class ClientGUI extends JFrame implements ActionListener{
 			
 			if(client.getType().equals(Client.TYPE_PLAYER)) 
 			{
-				chatPane = new ClienteChat(client.getNick());
 				String[] Canciones = new String[4];
 				Canciones[0] = "Legends Never Die";
 				Canciones[1] = "pumped";
@@ -184,6 +183,7 @@ public class ClientGUI extends JFrame implements ActionListener{
 			}
 			else 
 			{
+				System.out.println("me llamo: "+client.getNick());
 				chatPane = new ClienteChat(client.getNick());
 				String[] Canciones = new String[4];
 				Canciones[0] = "Legends Never Die";

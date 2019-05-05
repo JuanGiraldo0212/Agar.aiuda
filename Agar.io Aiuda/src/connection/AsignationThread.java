@@ -46,6 +46,7 @@ public class AsignationThread extends Thread{
 							System.out.println("Se conecto: "+userData[0]);
 							server.getUserNames().add(userData[0]);
 							Player player=new Player(userData[0]);
+							System.out.println("aqui me llamo: "+userData[0]);
 							server.getGame().getPlayers().add(player);
 							ServerLobbyThread lobbyThread=new ServerLobbyThread(server);
 							server.getLobbyThreads().add(lobbyThread);
