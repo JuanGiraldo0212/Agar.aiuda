@@ -29,7 +29,7 @@ public class Server {
 	public final static int SERVER_PORT_LOBBY=8001;
 	public final static int SERVER_PORT_GAME=8002;
 	public final static int SERVER_PORT_VIEW=8003;
-	public final static String IP_MULTICAST = "230.1.1.1";
+	public final static String IP_MULTICAST = "239.1.2.2";
 	public static final String KEYSTORE_LOCATION = "./Docs/keystore.jks";
 	public static final String KEYSTORE_PASSWORD = "viejito";
 	public static final String LOG_PATH = "./Docs/Logs.txt";
@@ -39,6 +39,7 @@ public class Server {
 	private ServerSocket serverSocketLobby;
 	private ServerSocket serverSocketGame;
 	private DatagramSocket serverSocketView;
+	private DatagramSocket serverSocketMusica ;
 	private ArrayList<Socket> playersSockets;
 	//private ArrayList<DatagramSocket> viewersSockets;
 	private AsignationThread asignationThread;
@@ -53,7 +54,8 @@ public class Server {
 	private boolean startView;
 	
 	private AudioServidor audioServer;
-//	private IndividualAudioServer audioIndividualServer;
+	private ArrayList<IndividualAudioServer> audioIndividualServerThreads;
+	
 	private ServidorChat servidorChat;
 	
 	
@@ -71,18 +73,20 @@ public class Server {
 			playersSockets=new ArrayList<>();
 			lobbyThreads=new ArrayList<ServerLobbyThread>();
 			serverThreads=new ArrayList<ServerCommunicationThread>();
+			audioIndividualServerThreads = new ArrayList<IndividualAudioServer>();
 			serverSocketView=new DatagramSocket();
 			viewThread=new ServerViewThread(this);
 			viewThread.start();
 			
 			SSLServerSocketFactory ssf = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 			serverSocket = ssf.createServerSocket(SERVER_PORT);
+			System.out.println(serverSocket.getInetAddress().getLocalHost());
 			
 			serverSocketLobby=new ServerSocket(SERVER_PORT_LOBBY);
 			serverSocketGame=new ServerSocket(SERVER_PORT_GAME);
 			
-			audioServer = new AudioServidor(CANCION_PREDET);
-			audioServer.start();
+//			audioServer = new AudioServidor(CANCION_PREDET);
+//			audioServer.start();
 			
 			asignationThread = new AsignationThread(this);
 			asignationThread.start();
@@ -352,6 +356,54 @@ public class Server {
 
 	public void setStartView(boolean startView) {
 		this.startView = startView;
+	}
+
+	public DatagramSocket getServerSocketMusica() {
+		return serverSocketMusica;
+	}
+
+	public void setServerSocketMusica(DatagramSocket serverSocketMusica) {
+		this.serverSocketMusica = serverSocketMusica;
+	}
+
+	public AsignationThread getAsignationThread() {
+		return asignationThread;
+	}
+
+	public void setAsignationThread(AsignationThread asignationThread) {
+		this.asignationThread = asignationThread;
+	}
+
+	public ServerViewThread getViewThread() {
+		return viewThread;
+	}
+
+	public void setViewThread(ServerViewThread viewThread) {
+		this.viewThread = viewThread;
+	}
+
+	public AudioServidor getAudioServer() {
+		return audioServer;
+	}
+
+	public void setAudioServer(AudioServidor audioServer) {
+		this.audioServer = audioServer;
+	}
+
+	public ArrayList<IndividualAudioServer> getAudioIndividualServerThreads() {
+		return audioIndividualServerThreads;
+	}
+
+	public void setAudioIndividualServerThreads(ArrayList<IndividualAudioServer> audioIndividualServerThreads) {
+		this.audioIndividualServerThreads = audioIndividualServerThreads;
+	}
+
+	public ServidorChat getServidorChat() {
+		return servidorChat;
+	}
+
+	public void setServidorChat(ServidorChat servidorChat) {
+		this.servidorChat = servidorChat;
 	}
 	
 	

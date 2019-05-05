@@ -23,7 +23,19 @@ public class AudioCliente extends Thread {
 	private Boolean isPlaying;
 	public AudioCliente() 
 	{
-		isPlaying = true;
+		try 
+		{
+			isPlaying = true;
+			socketMusica = new MulticastSocket(AudioServidor.AUDIO_PORT);
+			socketFormat = new MulticastSocket(AudioServidor.FORMAT_PORT);
+			
+			InetAddress inetAddress = InetAddress.getByName(AudioServidor.IP_DATOS);
+			
+			socketMusica.joinGroup(inetAddress);
+			socketFormat.joinGroup(inetAddress);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void playAudio() {
@@ -42,18 +54,13 @@ public class AudioCliente extends Thread {
 
 	private void initiateAudio() {
 		try {
-			socketMusica = new MulticastSocket(AudioServidor.AUDIO_PORT);
-			socketFormat = new MulticastSocket(AudioServidor.FORMAT_PORT);
-			
-			InetAddress inetAddress = InetAddress.getByName(AudioServidor.IP_DATOS);
-			
-			socketMusica.joinGroup(inetAddress);
-			socketFormat.joinGroup(inetAddress);
 			
 			byte[] audioBuffer = new byte[60000];
 			byte[] formatBuffer = new byte[60000];
 			
-			while (isPlaying) {
+			System.out.println("preparando recepcion de musica");
+			while (true) {
+				System.out.println("recibiendo musica");
 				DatagramPacket packetFormat = new DatagramPacket(formatBuffer, formatBuffer.length);
 				socketFormat.receive(packetFormat);
 				
@@ -96,4 +103,8 @@ public class AudioCliente extends Thread {
 		initiateAudio();
 	}
 	
+	public static void main(String[] args) {
+		AudioCliente ac = new AudioCliente();
+		ac.start();
+	}
 }

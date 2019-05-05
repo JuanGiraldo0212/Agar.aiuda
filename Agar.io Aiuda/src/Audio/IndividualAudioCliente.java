@@ -171,7 +171,7 @@ public class IndividualAudioCliente extends Thread{
 			client = new Client("localhost", null, null, null);
 			IndividualAudioCliente ic = new IndividualAudioCliente(client);
 			ic.realizarSolicitud("Yoshi");
-			ic.run();
+			ic.start();
 		} catch (AccountNotFoundException | WrongPasswordException | ExistingAccountException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

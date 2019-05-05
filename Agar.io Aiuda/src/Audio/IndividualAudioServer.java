@@ -14,6 +14,8 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import connection.Server;
+
 
  
 public class IndividualAudioServer extends Thread{
@@ -27,15 +29,19 @@ public class IndividualAudioServer extends Thread{
 	private byte audioBuffer[] = new byte[60000];
 	private byte formatBuffer[] = new byte[60000];	
 	
-private String nombreCancion;
+	private Server server;
+	private String nombreCancion;
+	private AudioInputStream audioStream;
+	private File file;
+	private TargetDataLine targetDataLine;
+	int puertoCliente;
+	private InetAddress direccionCliente;
+	private boolean isPlaying;
 
-private AudioInputStream audioStream;
-private DatagramSocket socketMusica ;
-private File file;
-private TargetDataLine targetDataLine;
-int puertoCliente;
-private InetAddress direccionCliente;
-
+	public IndividualAudioServer(Server server) 
+	{
+		this.server = server;
+	}
 	@Override
 	public void run() {
 		indiAudio();
@@ -52,10 +58,10 @@ private InetAddress direccionCliente;
 					formatBuffer = infoFormat.getBytes();
 					System.out.println(direccionCliente);
 					DatagramPacket packetFormat =  new DatagramPacket(formatBuffer, formatBuffer.length, direccionCliente, FORMAT_PORT);
-					socketMusica.send(packetFormat);
+					server.getServerSocketMusica().send(packetFormat);
 					
 					DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, direccionCliente, AUDIO_PORT);
-					socketMusica.send(packet);
+					server.getServerSocketMusica().send(packet);
 					sleep(TIME_SLEEP);
 				}
 			}
@@ -64,55 +70,7 @@ private InetAddress direccionCliente;
 		}
 	}
 
-	public void recibirSolicitud() {
-
-        
-        try {
-            System.out.println("Iniciado el servidor UDP");
-            //Creacion del socket
-            socketMusica = new DatagramSocket(PUERTO_SERVIDOR);
- 
-            //Siempre atendera peticiones
-            while (true) {
-            	byte[] buffer = new byte[TAMANHO_BUFF];
-            	                //Preparo la respuesta
-                DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
-                 
-                //Recibo el datagrama
-                socketMusica.receive(peticion);
-                System.out.println("Recibo la informacion del cliente");
-                 
-                //Convierto lo recibido y mostrar el mensaje
-                String mensaje = new String(peticion.getData());
-                
-               
-                nombreCancion = new String(mensaje);
-                
-                //Obtengo el puerto y la direccion de origen
-                //Sino se quiere responder, no es necesario
-                puertoCliente = peticion.getPort();
-                direccionCliente = peticion.getAddress();                
-                String respuesta = "preparamos: "+mensaje;
-                buffer = respuesta.getBytes();
- 
-                //creo el datagrama
-                DatagramPacket paqueterespuesta = new DatagramPacket(buffer, buffer.length, direccionCliente, puertoCliente);
- 
-                //Envio la información
-                
-                socketMusica.send(paqueterespuesta);
-                System.out.println("Envio la informacion del cliente");
-                cargarCancion(nombreCancion);
-            }
- 
-        } catch (SocketException ex) {
-        	ex.printStackTrace();
-//            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-        	ex.printStackTrace();
-//            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-	}
+	
 	
 	public void cargarCancion (String nombreCancion) {
 		try {
@@ -151,7 +109,7 @@ private InetAddress direccionCliente;
 	}
 
 	public static void main(String[] args) {
-		IndividualAudioServer is = new IndividualAudioServer();
+		IndividualAudioServer is = new IndividualAudioServer(null);
 		is.recibirSolicitud();
 		System.out.println("se cargó la canción");
 	}

@@ -833,3 +833,9 @@
 2019-05-05 11:00:15,488 [Thread-0] ERROR Chat.ClienteChat - Error al leer del stream de entrada: Connection reset
 2019-05-05 11:00:54,928 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
 2019-05-05 11:05:18,594 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-05 11:22:15,998 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-05 11:23:18,336 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-05 11:24:09,146 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-05 11:42:35,052 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-05 11:44:04,984 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-05 11:57:39,124 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.

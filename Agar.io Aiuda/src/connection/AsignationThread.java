@@ -25,7 +25,7 @@ public class AsignationThread extends Thread{
 				Socket socket=server.getServerSocket().accept();
 				if(inTime && server.getPlayersSockets().size()<5) {
 					
-					if(server.getPlayersSockets().size()==2) {
+					if(server.getPlayersSockets().size()==1) {
 						server.starTimer();
 					}
 					System.out.println("Un cliente se ha conectado");
