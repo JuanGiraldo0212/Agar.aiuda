@@ -17,7 +17,6 @@ import java.security.cert.CertificateException;
 import javax.net.ssl.SSLSocketFactory;
 
 import Audio.AudioCliente;
-import Audio.AudioIndividualCliente;
 import gui.ClientGUI;
 
 public class Client {
@@ -45,7 +44,6 @@ public class Client {
 	private String type;
 	
 	private AudioCliente audioClient;
-	private AudioIndividualCliente audioIndividualCliente;
 	
 	public Client(String serverIp,String data,ClientGUI client,String type) throws AccountNotFoundException, WrongPasswordException, ExistingAccountException{
 //		try {
@@ -223,16 +221,6 @@ public class Client {
 		this.clientThread = clientThread;
 	}
 	
-	
-
-	public AudioIndividualCliente getAudioIndividualCliente() {
-		return audioIndividualCliente;
-	}
-
-	public void setAudioIndividualCliente(AudioIndividualCliente audioIndividualCliente) {
-		this.audioIndividualCliente = audioIndividualCliente;
-	}
-
 	public ClientViewThread getViewThread() {
 		return viewThread;
 	}

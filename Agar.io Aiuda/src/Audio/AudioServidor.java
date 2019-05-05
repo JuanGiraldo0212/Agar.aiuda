@@ -30,6 +30,14 @@ public class AudioServidor extends Thread {
 	private File file;
 	private String[]Canciones;
 	
+	public AudioServidor() {
+		Canciones = new String[4];
+		Canciones[0] = "Legends Never Die";
+		Canciones[1] = "pumped";
+		Canciones[2] = "RISE";
+		Canciones[3] = "Yoshi";
+	}
+	
 	@Override
 	public void run() {
 		broadcastAudio();
@@ -76,11 +84,6 @@ public class AudioServidor extends Thread {
 
 	public void setupAudio() {
 		try {
-			Canciones = new String[4];
-			Canciones[0] = "Legends Never Die";
-			Canciones[1] = "pumped";
-			Canciones[2] = "RISE";
-			Canciones[3] = "Yoshi";
 			AudioFormat audioFormat =audioStream.getFormat();
 			DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
 			targetDataLine = (TargetDataLine) AudioSystem.getLine(dataLineInfo);

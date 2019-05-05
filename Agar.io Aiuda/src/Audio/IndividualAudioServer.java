@@ -13,7 +13,7 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.TargetDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
  
-public class indiServer extends Thread{
+public class IndividualAudioServer extends Thread{
 
 	public final static int PUERTO_SERVIDOR = 5000;
 	public final static int FORMAT_PORT = 9786;
@@ -147,7 +147,7 @@ private InetAddress direccionCliente;
 	}
 	
 	public static void main(String[] args) {
-		indiServer is = new indiServer();
+		IndividualAudioServer is = new IndividualAudioServer();
 		is.recibirSolicitud();
 		System.out.println("se cargó la canción");
 	}

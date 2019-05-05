@@ -9,7 +9,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import Audio.AudioIndividualCliente;
 import connection.AccountNotFoundException;
 import connection.Client;
 import connection.ExistingAccountException;
@@ -46,15 +45,15 @@ public class MusicPane extends JPanel implements ActionListener{
 		{
 			jbControl.setText("►");
 			jbControl.setActionCommand(START);
-			clientGUI.getClient().getAudioIndividualCliente().setStop(true);
+//			clientGUI.getClient().getAudioIndividualCliente().setStop(true);
 		}
 		else if (e.equals(START)) 
 		{
 			jbControl.setText("||");
 			jbControl.setActionCommand(STOP);
-			clientGUI.getClient().setAudioIndividualCliente(new AudioIndividualCliente(jcCanciones.getSelectedItem()+"", clientGUI.getClient()));
-			clientGUI.getClient().getAudioIndividualCliente().start();
-			clientGUI.getClient().getAudioIndividualCliente().setStop(false);
+//			clientGUI.getClient().setAudioIndividualCliente(new AudioIndividualCliente(jcCanciones.getSelectedItem()+"", clientGUI.getClient()));
+//			clientGUI.getClient().getAudioIndividualCliente().start();
+//			clientGUI.getClient().getAudioIndividualCliente().setStop(false);
 
 		}
 		

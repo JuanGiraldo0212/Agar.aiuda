@@ -19,10 +19,10 @@ import connection.Client;
 import connection.ExistingAccountException;
 import connection.WrongPasswordException;
  
-public class indiCliente extends Thread{
+public class IndividualAudioCliente extends Thread{
 
-	public final static int PUERTO_SERVIDOR = 5000;
 	public final static int TAMANHO_BUFF = 60000;
+	public final static int PUERTO_SERVIDOR = 5000;
 	public final static int FORMAT_PORT = 9786;
 	public final static int AUDIO_PORT = 9787;
 	
@@ -158,7 +158,7 @@ public class indiCliente extends Thread{
 	}
 	
 	public static void main(String[] args) {
-		indiCliente ic = new indiCliente();
+		IndividualAudioCliente ic = new IndividualAudioCliente();
 		Client client;
 		try {
 			client = new Client("localhost", null, null, null);
