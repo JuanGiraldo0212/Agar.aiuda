@@ -33,7 +33,7 @@ public class Server {
 	public static final String KEYSTORE_LOCATION = "./Docs/keystore.jks";
 	public static final String KEYSTORE_PASSWORD = "viejito";
 	public static final String LOG_PATH = "./Docs/Logs.txt";
-	public static final String CANCION_PREDET = "Yoshi";
+	public static final String CANCION_PREDET = "RISE";
 	
 	private ServerSocket serverSocket;
 	private ServerSocket serverSocketLobby;
@@ -53,7 +53,7 @@ public class Server {
 	private boolean startView;
 	
 	private AudioServidor audioServer;
-	private IndividualAudioServer audioIndividualServer;
+//	private IndividualAudioServer audioIndividualServer;
 	private ServidorChat servidorChat;
 	
 	

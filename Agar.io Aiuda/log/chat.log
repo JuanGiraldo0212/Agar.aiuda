@@ -760,3 +760,37 @@
 2019-05-04 22:59:29,379 [main] INFO  Chat.ServidorChat - Cliente con la IP icesi.edu.co conectado.
 2019-05-04 22:59:29,411 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
 2019-05-04 22:59:37,542 [Thread-8] INFO  Chat.ServerConexionClienteChat - Cliente con la IP icesi.edu.co desconectado.
+2019-05-04 23:11:16,481 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-04 23:11:42,784 [Thread-5] INFO  Chat.ClienteChat - Quieres conectarte a localhost en el puerto 1234 con el nombre de ususario: juan.
+2019-05-04 23:11:42,791 [main] INFO  Chat.ServidorChat - Cliente con la IP 127.0.0.1 conectado.
+2019-05-04 23:11:42,794 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-04 23:11:51,386 [Thread-8] INFO  Chat.ServerConexionClienteChat - Cliente con la IP 127.0.0.1 desconectado.
+2019-05-04 23:25:49,216 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-04 23:27:07,884 [Thread-5] INFO  Chat.ClienteChat - Quieres conectarte a localhost en el puerto 1234 con el nombre de ususario: juan.
+2019-05-04 23:27:07,895 [main] INFO  Chat.ServidorChat - Cliente con la IP 127.0.0.1 conectado.
+2019-05-04 23:27:07,900 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-04 23:31:44,900 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-04 23:33:25,562 [Thread-5] INFO  Chat.ClienteChat - Quieres conectarte a localhost en el puerto 1234 con el nombre de ususario: juan.
+2019-05-04 23:33:25,573 [main] INFO  Chat.ServidorChat - Cliente con la IP 127.0.0.1 conectado.
+2019-05-04 23:33:25,575 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-04 23:34:52,236 [Thread-8] INFO  Chat.ServerConexionClienteChat - Cliente con la IP 127.0.0.1 desconectado.
+2019-05-04 23:38:46,334 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-04 23:40:16,558 [Thread-5] INFO  Chat.ClienteChat - Quieres conectarte a localhost en el puerto 1234 con el nombre de ususario: juan.
+2019-05-04 23:40:16,573 [main] INFO  Chat.ServidorChat - Cliente con la IP 127.0.0.1 conectado.
+2019-05-04 23:40:16,578 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-04 23:41:39,300 [Thread-8] INFO  Chat.ServerConexionClienteChat - Cliente con la IP 127.0.0.1 desconectado.
+2019-05-04 23:51:14,434 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-04 23:51:55,744 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-04 23:53:11,280 [Thread-5] INFO  Chat.ClienteChat - Quieres conectarte a localhost en el puerto 1234 con el nombre de ususario: juan.
+2019-05-04 23:53:11,293 [main] INFO  Chat.ServidorChat - Cliente con la IP 127.0.0.1 conectado.
+2019-05-04 23:53:11,296 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-04 23:54:42,331 [Thread-8] INFO  Chat.ServerConexionClienteChat - Cliente con la IP 127.0.0.1 desconectado.
+2019-05-04 23:58:21,189 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-04 23:59:49,429 [Thread-5] INFO  Chat.ClienteChat - Quieres conectarte a localhost en el puerto 1234 con el nombre de ususario: juan.
+2019-05-04 23:59:49,446 [main] INFO  Chat.ServidorChat - Cliente con la IP 127.0.0.1 conectado.
+2019-05-04 23:59:49,449 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-05 00:00:20,048 [Thread-2] INFO  Chat.ClienteChat - Quieres conectarte a localhost en el puerto 1234 con el nombre de ususario: null.
+2019-05-05 00:00:20,208 [main] INFO  Chat.ServidorChat - Cliente con la IP 127.0.0.1 conectado.
+2019-05-05 00:00:20,209 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-05 00:01:56,045 [Thread-8] INFO  Chat.ServerConexionClienteChat - Cliente con la IP 127.0.0.1 desconectado.
+2019-05-05 00:02:02,880 [Thread-9] INFO  Chat.ServerConexionClienteChat - Cliente con la IP 127.0.0.1 desconectado.
