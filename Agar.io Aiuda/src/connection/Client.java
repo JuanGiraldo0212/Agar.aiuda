@@ -17,6 +17,7 @@ import java.security.cert.CertificateException;
 import javax.net.ssl.SSLSocketFactory;
 
 import Audio.AudioCliente;
+import Audio.IndividualAudioCliente;
 import gui.ClientGUI;
 
 public class Client {
@@ -43,47 +44,50 @@ public class Client {
 	private char[] password = {'v','i','e','j','i','t', 'o'};
 	private String type;
 	
+	private DatagramSocket socketMusica;
+	private DatagramSocket socketFormat;
 	private AudioCliente audioClient;
+	private IndividualAudioCliente audioIndividual;
 	
 	public Client(String serverIp,String data,ClientGUI client,String type) throws AccountNotFoundException, WrongPasswordException, ExistingAccountException{
-//		try {
+		try {
 			this.serverIp=serverIp;
-//			gui=client;
-//			this.type=type;
-//			if(type.equals(TYPE_PLAYER)) {
-//				System.setProperty("javax.net.ssl.trustStore", TRUSTTORE_LOCATION);
-//				SSLSocketFactory sf = (SSLSocketFactory) SSLSocketFactory.getDefault();
-//				
-//				KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-//				keyStore.load(new FileInputStream(TRUSTTORE_LOCATION), password);
-//				socketConnection = sf.createSocket(serverIp, SERVER_PORT);
-//				in=new DataInputStream(socketConnection.getInputStream());
-//				out=new DataOutputStream(socketConnection.getOutputStream());
-//				String [] userInfo=data.split(" ");
-//				nick=userInfo[0];
-//				out.writeUTF(data);
-//				String respond = in.readUTF();
-//				if(respond.equals("AccountNotFoundException"))
-//				{
-//					throw new AccountNotFoundException();
-//				}
-//				else if(respond.equals("WrongPasswordException"))
-//				{
-//					throw new WrongPasswordException();
-//				}
-//				else if(respond.equals("ExistingAccountException"))
-//				{
-//					throw new ExistingAccountException();
-//				}
-//				audioClient = new AudioCliente();
-//				audioClient.start();
-//			}
-//			
-//		} catch (IOException | KeyStoreException |NoSuchAlgorithmException | CertificateException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
+			gui=client;
+			this.type=type;
+			if(type.equals(TYPE_PLAYER)) {
+				System.setProperty("javax.net.ssl.trustStore", TRUSTTORE_LOCATION);
+				SSLSocketFactory sf = (SSLSocketFactory) SSLSocketFactory.getDefault();
+				
+				KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+				keyStore.load(new FileInputStream(TRUSTTORE_LOCATION), password);
+				socketConnection = sf.createSocket(serverIp, SERVER_PORT);
+				in=new DataInputStream(socketConnection.getInputStream());
+				out=new DataOutputStream(socketConnection.getOutputStream());
+				String [] userInfo=data.split(" ");
+				nick=userInfo[0];
+				out.writeUTF(data);
+				String respond = in.readUTF();
+				if(respond.equals("AccountNotFoundException"))
+				{
+					throw new AccountNotFoundException();
+				}
+				else if(respond.equals("WrongPasswordException"))
+				{
+					throw new WrongPasswordException();
+				}
+				else if(respond.equals("ExistingAccountException"))
+				{
+					throw new ExistingAccountException();
+				}
+				audioClient = new AudioCliente();
+				audioClient.start();
+			}
+			
+		} catch (IOException | KeyStoreException |NoSuchAlgorithmException | CertificateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		audioIndividual = new IndividualAudioCliente(this);
 		
 	}
 	
@@ -245,6 +249,29 @@ public class Client {
 		this.audioClient = audioClient;
 	}
 
+	public IndividualAudioCliente getAudioIndividual() {
+		return audioIndividual;
+	}
+
+	public void setAudioIndividual(IndividualAudioCliente audioIndividual) {
+		this.audioIndividual = audioIndividual;
+	}
+
+	public DatagramSocket getSocketMusica() {
+		return socketMusica;
+	}
+
+	public void setSocketMusica(DatagramSocket socketMusica) {
+		this.socketMusica = socketMusica;
+	}
+
+	public DatagramSocket getSocketFormat() {
+		return socketFormat;
+	}
+
+	public void setSocketFormat(DatagramSocket socketFormat) {
+		this.socketFormat = socketFormat;
+	}
 	
 	
 

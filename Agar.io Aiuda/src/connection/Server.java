@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import javax.net.ssl.SSLServerSocketFactory;
 
 import Audio.AudioServidor;
+import Audio.IndividualAudioCliente;
+import Audio.IndividualAudioServer;
 import Chat.ServidorChat;
 import gui.GameThread;
 import model.Ball;
@@ -50,9 +52,8 @@ public class Server {
 	private GameThread gameThread;
 	private boolean startView;
 	
-	//TODO
 	private AudioServidor audioServer;
-	//private AudioIndividualServidor audioIndividualServer;
+	private IndividualAudioServer audioIndividualServer;
 	private ServidorChat servidorChat;
 	
 	
@@ -80,17 +81,16 @@ public class Server {
 			serverSocketLobby=new ServerSocket(SERVER_PORT_LOBBY);
 			serverSocketGame=new ServerSocket(SERVER_PORT_GAME);
 			
-			audioServer = new AudioServidor(CANCION_PREDET);
-			audioServer.start();
+//			audioServer = new AudioServidor(CANCION_PREDET);
+//			audioServer.start();
 			
 			asignationThread = new AsignationThread(this);
 			asignationThread.start();
 			timerThread=new TimerThread(asignationThread, wait);
 			gameThread=new GameThread(this, 30);
 			
-			//TODO
-//			audioIndividualServer = new AudioIndividualServidor();
-//			audioIndividualServer.start();
+			audioIndividualServer = new IndividualAudioServer();
+			audioIndividualServer.recibirSolicitud();
 			
 			servidorChat = new ServidorChat();
 			

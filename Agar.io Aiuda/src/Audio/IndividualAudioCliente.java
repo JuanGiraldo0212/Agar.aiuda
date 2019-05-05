@@ -26,16 +26,26 @@ public class IndividualAudioCliente extends Thread{
 	public final static int FORMAT_PORT = 9786;
 	public final static int AUDIO_PORT = 9787;
 	
-	private DatagramSocket socketFormat;
+	private boolean isPlaying;
 	private AudioInputStream audioInputStream;
 	private SourceDataLine sourceDataLine;
-	private DatagramSocket socketMusica;
 	private Client client;
 	
-	public void realizarSolicitud (String cancion, Client client) {
+	public IndividualAudioCliente(Client client)
+	{
 		this.client = client;
+		isPlaying = false;
+	    try 
+	    {
+			client.setSocketFormat(new DatagramSocket(FORMAT_PORT));
+			client.setSocketMusica(new DatagramSocket(AUDIO_PORT));
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void realizarSolicitud (String cancion) {
 		 byte[] buffer = new byte[TAMANHO_BUFF];
-		 
 	        try {
 	            //Obtengo la localizacion de localhost
 	            InetAddress direccionServidor = InetAddress.getByName(client.getServerIp());
@@ -83,22 +93,18 @@ public class IndividualAudioCliente extends Thread{
 
 	public void iniciarAudio() {
 	
-		try {	
-			
-		    socketFormat = new DatagramSocket(FORMAT_PORT);
-			socketMusica = new DatagramSocket(AUDIO_PORT);
-			
+		try {				
 //			InetAddress inetAddress = InetAddress.getByName("localhost");
 			
 			byte[] audioBuffer = new byte[TAMANHO_BUFF];
 			byte[] formatBuffer = new byte[TAMANHO_BUFF];
 			
-			while (true) {
+			while (isPlaying) {
 				DatagramPacket packetFormat = new DatagramPacket(formatBuffer, formatBuffer.length);
-				socketFormat.receive(packetFormat);
+				client.getSocketFormat().receive(packetFormat);
 				System.out.println("cliente inicia a recibir cancion");
 				DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length);
-				socketMusica.receive(packet);
+				client.getSocketMusica().receive(packet);
 				
 				try {
 					byte audioData[] = packet.getData();
@@ -154,21 +160,29 @@ public class IndividualAudioCliente extends Thread{
 	
 	@Override
 	public void run() {
+		isPlaying = true;
+
 		iniciarAudio();
 	}
 	
 	public static void main(String[] args) {
-		IndividualAudioCliente ic = new IndividualAudioCliente();
 		Client client;
 		try {
 			client = new Client("localhost", null, null, null);
-			ic.realizarSolicitud("Yoshi", client);
+			IndividualAudioCliente ic = new IndividualAudioCliente(client);
+			ic.realizarSolicitud("Yoshi");
 			ic.run();
 		} catch (AccountNotFoundException | WrongPasswordException | ExistingAccountException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
+	}
+	public boolean isPlaying() {
+		return isPlaying;
+	}
+	public void setPlaying(boolean isPlaying) {
+		this.isPlaying = isPlaying;
 	}
 	
 }

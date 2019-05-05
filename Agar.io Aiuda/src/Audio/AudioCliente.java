@@ -20,9 +20,10 @@ public class AudioCliente extends Thread {
 	private SourceDataLine sourceDataLine;
 	private MulticastSocket socketMusica;
 	private MulticastSocket socketFormat;
-	
-	public AudioCliente() {
-
+	private Boolean isPlaying;
+	public AudioCliente() 
+	{
+		isPlaying = true;
 	}
 
 	private void playAudio() {
@@ -52,7 +53,7 @@ public class AudioCliente extends Thread {
 			byte[] audioBuffer = new byte[60000];
 			byte[] formatBuffer = new byte[60000];
 			
-			while (true) {
+			while (isPlaying) {
 				DatagramPacket packetFormat = new DatagramPacket(formatBuffer, formatBuffer.length);
 				socketFormat.receive(packetFormat);
 				

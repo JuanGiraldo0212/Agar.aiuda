@@ -736,3 +736,13 @@
 2019-05-04 11:50:48,325 [main] INFO  Chat.ServidorChat - Cliente con la IP 127.0.0.1 conectado.
 2019-05-04 11:50:48,330 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
 2019-05-04 11:52:09,926 [Thread-10] INFO  Chat.ServerConexionClienteChat - Cliente con la IP 127.0.0.1 desconectado.
+2019-05-04 21:53:53,408 [Thread-6] INFO  Chat.ClienteChat - Quieres conectarte a localhost en el puerto 1234 con el nombre de ususario: juan.
+2019-05-04 21:53:54,448 [Thread-6] ERROR Chat.ClienteChat - No se ha podido conectar con el servidor (Connection refused: connect).
+2019-05-04 21:53:54,471 [Thread-6] ERROR Chat.ClienteConexionServidorChat - El socket no se creo correctamente. 
+2019-05-04 21:53:54,517 [Thread-6] ERROR Chat.ClienteChat - El socket no se creo correctamente. 
+2019-05-04 21:53:54,517 [Thread-6] ERROR Chat.ClienteChat - El socket no se creo correctamente. 
+2019-05-04 21:56:45,319 [Thread-5] INFO  Chat.ClienteChat - Quieres conectarte a localhost en el puerto 1234 con el nombre de ususario: juan.
+2019-05-04 21:56:46,347 [Thread-5] ERROR Chat.ClienteChat - No se ha podido conectar con el servidor (Connection refused: connect).
+2019-05-04 21:56:46,349 [Thread-5] ERROR Chat.ClienteConexionServidorChat - El socket no se creo correctamente. 
+2019-05-04 21:56:46,415 [Thread-5] ERROR Chat.ClienteChat - El socket no se creo correctamente. 
+2019-05-04 21:56:46,415 [Thread-5] ERROR Chat.ClienteChat - El socket no se creo correctamente. 

@@ -13,6 +13,8 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
+
+import org.omg.IOP.TransactionService;
  
 public class IndividualAudioServer extends Thread{
 
@@ -34,7 +36,7 @@ private TargetDataLine targetDataLine;
 int puertoCliente;
 private InetAddress direccionCliente;
 
-@Override
+	@Override
 	public void run() {
 		indiAudio();
 	}
@@ -64,8 +66,7 @@ private InetAddress direccionCliente;
 
 	public void recibirSolicitud() {
 
-        byte[] buffer = new byte[TAMANHO_BUFF];
- 
+        
         try {
             System.out.println("Iniciado el servidor UDP");
             //Creacion del socket
@@ -73,8 +74,8 @@ private InetAddress direccionCliente;
  
             //Siempre atendera peticiones
             while (true) {
-                 
-                //Preparo la respuesta
+            	byte[] buffer = new byte[TAMANHO_BUFF];
+            	                //Preparo la respuesta
                 DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
                  
                 //Recibo el datagrama
@@ -91,15 +92,15 @@ private InetAddress direccionCliente;
                 //Sino se quiere responder, no es necesario
                 puertoCliente = peticion.getPort();
                 direccionCliente = peticion.getAddress();                
-                mensaje = "preparamos: "+mensaje;
-                buffer = mensaje.getBytes();
+                String respuesta = "preparamos: "+mensaje;
+                buffer = respuesta.getBytes();
  
                 //creo el datagrama
-                DatagramPacket respuesta = new DatagramPacket(buffer, buffer.length, direccionCliente, puertoCliente);
+                DatagramPacket paqueterespuesta = new DatagramPacket(buffer, buffer.length, direccionCliente, puertoCliente);
  
                 //Envio la información
                 
-                socketMusica.send(respuesta);
+                socketMusica.send(paqueterespuesta);
                 System.out.println("Envio la informacion del cliente");
                 cargarCancion(nombreCancion);
             }
@@ -148,7 +149,7 @@ private InetAddress direccionCliente;
 			System.exit(0);
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		IndividualAudioServer is = new IndividualAudioServer();
 		is.recibirSolicitud();
