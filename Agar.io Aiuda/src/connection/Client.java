@@ -81,6 +81,8 @@ public class Client {
 				}
 				audioClient = new AudioCliente();
 				audioClient.start();
+			}else {
+				this.nick = data.split(" ")[0];
 			}
 			
 		} catch (IOException | KeyStoreException |NoSuchAlgorithmException | CertificateException e) {

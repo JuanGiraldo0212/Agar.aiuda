@@ -818,3 +818,9 @@
 2019-05-05 00:40:50,966 [main] INFO  Chat.ServidorChat - Cliente con la IP 127.0.0.1 conectado.
 2019-05-05 00:40:50,968 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
 2019-05-05 00:41:08,266 [Thread-8] INFO  Chat.ServerConexionClienteChat - Cliente con la IP 127.0.0.1 desconectado.
+2019-05-05 01:03:41,953 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-05 01:04:37,358 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-05 01:05:57,279 [Thread-2] INFO  Chat.ClienteChat - Quieres conectarte a localhost en el puerto 1234 con el nombre de ususario: fer.
+2019-05-05 01:05:57,606 [main] INFO  Chat.ServidorChat - Cliente con la IP 127.0.0.1 conectado.
+2019-05-05 01:05:57,686 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-05 01:07:02,343 [Thread-8] INFO  Chat.ServerConexionClienteChat - Cliente con la IP 127.0.0.1 desconectado.
