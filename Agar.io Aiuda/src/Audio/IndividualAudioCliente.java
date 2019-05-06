@@ -23,8 +23,8 @@ public class IndividualAudioCliente extends Thread{
 
 	public final static int TAMANHO_BUFF = 60000;
 	public final static int PUERTO_SERVIDOR = 5000;
-	public final static int FORMAT_PORT = 9786;
-	public final static int AUDIO_PORT = 9787;
+	public final static int FORMAT_PORT = 9781;
+	public final static int AUDIO_PORT = 9782;
 	
 	private boolean isPlaying;
 	private AudioInputStream audioInputStream;
@@ -171,7 +171,7 @@ public class IndividualAudioCliente extends Thread{
 			client = new Client("localhost", null, null, null);
 			IndividualAudioCliente ic = new IndividualAudioCliente(client);
 			ic.realizarSolicitud("Yoshi");
-			ic.run();
+			ic.start();
 		} catch (AccountNotFoundException | WrongPasswordException | ExistingAccountException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

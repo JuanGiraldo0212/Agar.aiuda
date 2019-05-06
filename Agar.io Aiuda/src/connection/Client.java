@@ -89,7 +89,7 @@ public class Client {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		audioIndividual = new IndividualAudioCliente(this);
+		audioIndividual = new IndividualAudioCliente(this);
 		
 	}
 	

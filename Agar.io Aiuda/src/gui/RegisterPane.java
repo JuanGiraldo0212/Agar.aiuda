@@ -78,11 +78,11 @@ public class RegisterPane extends JPanel implements ActionListener{
 		if(command.equals(START))
 		{
 			String resp=JOptionPane.showInputDialog("Ingrese la ip del servidor");
-			main.startGame(resp, txtMail.getText()+" "+txtPass.getText(),Client.TYPE_PLAYER);
+			main.startGame(resp, txtNick.getText() + " " + txtMail.getText()+" "+txtPass.getText(),Client.TYPE_PLAYER);
 		}
 		else {
 			String resp=JOptionPane.showInputDialog("Ingrese la ip del servidor");
-			main.startGame(resp, txtMail.getText()+" "+txtPass.getText(),Client.TYPE_VIEWER);
+			main.startGame(resp, txtNick.getText() + " " + txtMail.getText()+" "+txtPass.getText(),Client.TYPE_VIEWER);
 		}
 		
 	}

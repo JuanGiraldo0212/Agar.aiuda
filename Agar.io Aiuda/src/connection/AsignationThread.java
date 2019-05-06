@@ -22,12 +22,12 @@ public class AsignationThread extends Thread{
 		super.run();
 		while(inTime){
 			try {
+				if(server.getPlayersSockets().size()==1) {
+					server.starTimer();
+				}
 				Socket socket=server.getServerSocket().accept();
 				if(inTime && server.getPlayersSockets().size()<5) {
 					
-					if(server.getPlayersSockets().size()==2) {
-						server.starTimer();
-					}
 					System.out.println("Un cliente se ha conectado");
 					DataInputStream in =new DataInputStream(socket.getInputStream());
 					DataOutputStream out = new DataOutputStream(socket.getOutputStream());
