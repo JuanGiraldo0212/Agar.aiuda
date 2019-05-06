@@ -11,8 +11,8 @@ public class ServerGUI extends JFrame{
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		server = new Server(2);
-		
+		server = new Server(30);
+		//192.168.43.180
 	}
 
 }
