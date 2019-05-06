@@ -880,3 +880,19 @@
 2019-05-05 19:46:32,035 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
 2019-05-05 19:48:20,396 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
 2019-05-05 19:49:34,822 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-06 14:25:04,089 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-06 14:26:20,478 [main] ERROR Chat.ServidorChat - Error: Address already in use: JVM_Bind
+2019-05-06 14:27:08,106 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-06 14:28:11,934 [main] INFO  Chat.ClienteChat - Quieres conectarte a 172.30.179.16 en el puerto 1234 con el nombre de ususario: juan manuel.
+2019-05-06 14:28:12,010 [main] INFO  Chat.ServidorChat - Cliente con la IP 172.30.179.16 conectado.
+2019-05-06 14:28:12,013 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-06 14:29:15,298 [main] ERROR Chat.ClienteChat - Error al leer del stream de entrada: Connection reset
+2019-05-06 14:39:16,953 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-06 14:39:24,371 [main] INFO  Chat.ClienteChat - Quieres conectarte a 172.20.10.10 en el puerto 1234 con el nombre de ususario: juan manuel.
+2019-05-06 14:39:24,418 [main] INFO  Chat.ServidorChat - Cliente con la IP López-Cleves conectado.
+2019-05-06 14:39:24,421 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-06 14:39:36,068 [main] INFO  Chat.ServidorChat - Cliente con la IP LAPTOP-PV194RA9 conectado.
+2019-05-06 14:39:36,069 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-06 14:40:20,077 [Thread-1] INFO  Chat.ServerConexionClienteChat - Cliente con la IP LAPTOP-PV194RA9 desconectado.
+2019-05-06 14:40:38,426 [main] ERROR Chat.ClienteChat - Error al leer del stream de entrada: Connection reset
+2019-05-06 14:52:16,509 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.

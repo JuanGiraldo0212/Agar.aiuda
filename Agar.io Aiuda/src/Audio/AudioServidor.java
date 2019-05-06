@@ -3,6 +3,7 @@ package Audio;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.net.SocketException;
 import java.io.File;
 import java.io.IOException;
@@ -30,14 +31,6 @@ public class AudioServidor extends Thread {
 	private File file;
 	private String[]Canciones;
 	
-	public AudioServidor() {
-		Canciones = new String[4];
-		Canciones[0] = "Legends Never Die";
-		Canciones[1] = "pumped";
-		Canciones[2] = "RISE";
-		Canciones[3] = "Yoshi";
-	}
-	
 	@Override
 	public void run() {
 		broadcastAudio();
@@ -47,7 +40,7 @@ public class AudioServidor extends Thread {
 		try {
 			socketMusica = new DatagramSocket();
 			socketFormato = new DatagramSocket();
-			file= new File("./Musica/"+song+".wav");
+			file= new File("./Musica/"+song.trim()+".wav");
 			audioStream= AudioSystem.getAudioInputStream(file);
 			setupAudio();
 		} catch (SocketException e) {
@@ -104,6 +97,11 @@ public class AudioServidor extends Thread {
 		Canciones = canciones;
 	}
 
+	public static void main(String[] args) {
+		AudioServidor as = new AudioServidor("RISE");
+		as.start();
+		
+	}
 	
 	
 }

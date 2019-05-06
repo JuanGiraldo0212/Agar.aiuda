@@ -34,7 +34,7 @@ public class ClienteChat extends JPanel{
     private String host;
     private String usuario;
     
-    public ClienteChat(String nick) {
+    public ClienteChat(Client cliente) {
     	PropertyConfigurator.configure("log4j.properties"); 
     	// Elementos de la ventana
         mensajesChat = new JTextArea();
@@ -58,9 +58,9 @@ public class ClienteChat extends JPanel{
      
      // configuracion inicial
         
-         host = ServidorChat.elHost;
+         host = cliente.getServerIp();
          puerto = ServidorChat.elPuerto;
-         usuario = nick;
+         usuario = cliente.getNick();
          
         log.info("Quieres conectarte a " + host + " en el puerto " + puerto + " con el nombre de ususario: " + usuario + ".");
         
@@ -111,19 +111,18 @@ public class ClienteChat extends JPanel{
     /**
      * @param args the command line arguments
      */
-    //TODO
-    
-    public static void main(String[] args) {
-        // Carga el archivo de configuracion de log4J
-        PropertyConfigurator.configure("log4j.properties");        
-              
-        ClienteChat c = new ClienteChat("juan diego");
-        
-        JFrame pan = new JFrame();
-        pan.add(c);
-        pan.setVisible(true);
-        
-        c.recibirMensajesServidor();
-    }
+    //TODO  
+//    public static void main(String[] args) {
+//        // Carga el archivo de configuracion de log4J
+//        PropertyConfigurator.configure("log4j.properties");        
+//              
+//        ClienteChat c = new ClienteChat("juan manuel");
+//        
+//        JFrame pan = new JFrame();
+//        pan.add(c);
+//        pan.setVisible(true);
+//        
+//        c.recibirMensajesServidor();
+//    }
     
 }

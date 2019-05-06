@@ -184,7 +184,7 @@ public class ClientGUI extends JFrame implements ActionListener{
 			else 
 			{
 				System.out.println("me llamo: "+client.getNick());
-				chatPane = new ClienteChat(client.getNick());
+				chatPane = new ClienteChat(client);
 				String[] Canciones = new String[4];
 				Canciones[0] = "Legends Never Die";
 				Canciones[1] = "pumped";

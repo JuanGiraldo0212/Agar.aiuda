@@ -7,17 +7,19 @@ import java.net.Socket;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import connection.Client;
+
 public class ServidorChat {
 
-	public static int elPuerto = 12345;
-	public static String elHost = "172.30.179.16";
+	public static int elPuerto = 1234;
+//	private String elHost = "172.20.10.10";
 
 	public ServidorChat() {
 		// Carga el archivo de configuracion de log4J
 		PropertyConfigurator.configure("log4j.properties");
 		Logger log = Logger.getLogger(ServidorChat.class);
 
-		int puerto = elPuerto;
+//		int puerto = elPuerto;
 		int maximoConexiones = 10; // Maximo de conexiones simultaneas
 		ServerSocket servidor = null;
 		Socket socket = null;
@@ -25,7 +27,7 @@ public class ServidorChat {
 
 		try {
 			// Se crea el serverSocket
-			servidor = new ServerSocket(puerto, maximoConexiones);
+			servidor = new ServerSocket(elPuerto, maximoConexiones);
 
 			// Bucle infinito para esperar conexiones
 			while (true) {
