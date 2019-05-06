@@ -31,7 +31,6 @@ public class IndividualAudioServer extends Thread{
 	
 	private Server server;
 	private AudioInputStream audioStream;
-	private File file;
 	private TargetDataLine targetDataLine;
 	private boolean isPlaying;
 	private String nombreCancion;
@@ -84,7 +83,7 @@ public class IndividualAudioServer extends Thread{
 			System.out.println(nombreCancion);
 			String path = "./Musica/"+nombreCancion.trim()+".wav";
 			System.out.println(path);
-			file= new File(path);
+			File file= new File(path);
 			audioStream= AudioSystem.getAudioInputStream(file);
 			setupAudio();
 			
@@ -135,12 +134,6 @@ public class IndividualAudioServer extends Thread{
 	}
 	public void setAudioStream(AudioInputStream audioStream) {
 		this.audioStream = audioStream;
-	}
-	public File getFile() {
-		return file;
-	}
-	public void setFile(File file) {
-		this.file = file;
 	}
 	public TargetDataLine getTargetDataLine() {
 		return targetDataLine;

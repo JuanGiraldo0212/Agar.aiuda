@@ -7,7 +7,9 @@ import java.net.InetAddress;
 import java.net.SocketException;
 
 import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.TargetDataLine;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import connection.Server;
 
@@ -57,13 +59,24 @@ public class IndividualMusicRequestServer extends Thread {
                 InetAddress direccionCliente = peticion.getAddress();                
                 String respuesta = "preparamos: "+mensaje;
                 buffer = respuesta.getBytes();
+                boolean hadAudio = false;
                 
+                System.out.println("hehe");
                 for (IndividualAudioServer audioThread : server.getAudioIndividualServerThreads()) 
                 {
 					if(audioThread.getDireccionCliente().equals(direccionCliente))
 					{
-						audioThread.setPlaying(false);
-						audioThread.getTargetDataLine().close();
+						String path = "./Musica/"+nombreCancion.trim()+".wav";
+						System.out.println(path);
+						File file= new File(path);
+						audioThread.setAudioStream(AudioSystem.getAudioInputStream(file));
+						
+						if(audioThread.getTargetDataLine()!=null) {							
+							audioThread.getTargetDataLine().close();
+						}
+						
+						audioThread.setupAudio();
+						hadAudio = true;
 					}
 				}
                 
@@ -72,11 +85,14 @@ public class IndividualMusicRequestServer extends Thread {
  
                 //Envio la información
                 
-                server.getServerSocketMusica().send(paqueterespuesta);
-                System.out.println("Envio la informacion del cliente");
-                IndividualAudioServer audio = new IndividualAudioServer(server, nombreCancion, puertoCliente, direccionCliente);
-                server.getAudioIndividualServerThreads().add(audio);
-                audio.start();
+                if (hadAudio == false) {
+                	System.out.println("aqui debe entrar");
+                	server.getServerSocketMusica().send(paqueterespuesta);
+                	System.out.println("Envio la informacion del cliente");
+                	IndividualAudioServer audio = new IndividualAudioServer(server, nombreCancion, puertoCliente, direccionCliente);
+                	server.getAudioIndividualServerThreads().add(audio);
+                	audio.start();                	
+                }
              
             }
  
@@ -86,6 +102,9 @@ public class IndividualMusicRequestServer extends Thread {
         } catch (IOException ex) {
         	ex.printStackTrace();
 //            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
