@@ -896,3 +896,13 @@
 2019-05-06 14:40:20,077 [Thread-1] INFO  Chat.ServerConexionClienteChat - Cliente con la IP LAPTOP-PV194RA9 desconectado.
 2019-05-06 14:40:38,426 [main] ERROR Chat.ClienteChat - Error al leer del stream de entrada: Connection reset
 2019-05-06 14:52:16,509 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-06 15:09:47,644 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-06 15:11:51,759 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-06 15:18:31,207 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-06 15:29:42,054 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-06 15:34:56,573 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-06 15:39:46,549 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-06 15:40:16,376 [main] INFO  Chat.ServidorChat - Servidor a la espera de conexiones.
+2019-05-06 15:41:09,363 [main] INFO  Chat.ServidorChat - LISTO PARA MUSICA MULTICAST
+2019-05-06 15:41:37,916 [main] INFO  Chat.ServidorChat - LISTO PARA MUSICA MULTICAST
+2019-05-06 15:43:38,487 [main] INFO  Chat.ServidorChat - LISTO PARA CHAT

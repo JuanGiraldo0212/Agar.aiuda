@@ -27,11 +27,12 @@ public class ServidorChat {
 
 		try {
 			// Se crea el serverSocket
+//			System.out.println("LISTO PARA MUSICA MULTICAST");
 			servidor = new ServerSocket(elPuerto, maximoConexiones);
 
 			// Bucle infinito para esperar conexiones
 			while (true) {
-				log.info("Servidor a la espera de conexiones.");
+				log.info("LISTO PARA CHAT");
 				socket = servidor.accept();
 				log.info("Cliente con la IP " + socket.getInetAddress().getHostName() + " conectado.");
 

@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
 
+import Audio.AudioCliente;
 import Chat.ClienteChat;
 import connection.AccountNotFoundException;
 import connection.Client;
@@ -42,7 +43,6 @@ public class ClientGUI extends JFrame implements ActionListener{
 	//TODO
 	private ClienteChat chatPane;
 	private MusicPane panelMusica;
-	
 
 	public ClientGUI() {
 		setTitle("Agar.io");
@@ -177,6 +177,7 @@ public class ClientGUI extends JFrame implements ActionListener{
 				Canciones[2] = "RISE";
 				Canciones[3] = "Yoshi";
 				panelMusica = new MusicPane(Canciones,this);
+				
 				remove(lobby);
 				add(draw,BorderLayout.CENTER);
 				add(panelMusica, BorderLayout.NORTH);
@@ -186,9 +187,9 @@ public class ClientGUI extends JFrame implements ActionListener{
 				System.out.println("me llamo: "+client.getNick());
 				chatPane = new ClienteChat(client);
 				String[] Canciones = new String[4];
+				Canciones[2] = "RISE";
 				Canciones[0] = "Legends Never Die";
 				Canciones[1] = "pumped";
-				Canciones[2] = "RISE";
 				Canciones[3] = "Yoshi";
 				panelMusica = new MusicPane(Canciones,this);
 				remove(first);

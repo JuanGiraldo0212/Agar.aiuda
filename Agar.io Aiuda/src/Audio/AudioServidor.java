@@ -82,6 +82,7 @@ public class AudioServidor extends Thread {
 			targetDataLine = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
 			targetDataLine.open(audioFormat);
 			targetDataLine.start();
+			System.out.println("LISTO PARA MUSICA MULTICAST");
 		} catch (Exception ex) {
 			 System.out.println(ex);
 			ex.printStackTrace();

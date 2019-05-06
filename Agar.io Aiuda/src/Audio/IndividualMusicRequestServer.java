@@ -37,7 +37,7 @@ public class IndividualMusicRequestServer extends Thread {
 	{
 		super.run();
 		try {
-            System.out.println("Iniciado el servidor UDP"); 
+            System.out.println("LISTO PARA MUSICA INDIVIDUAL"); 
             //Siempre atendera peticiones
             while (true) {
             	byte[] buffer = new byte[TAMANHO_BUFF];
