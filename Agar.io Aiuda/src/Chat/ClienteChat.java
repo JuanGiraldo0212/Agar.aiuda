@@ -112,7 +112,7 @@ public class ClienteChat extends JPanel{
      * @param args the command line arguments
      */
     //TODO
-    /*
+    
     public static void main(String[] args) {
         // Carga el archivo de configuracion de log4J
         PropertyConfigurator.configure("log4j.properties");        
@@ -125,5 +125,5 @@ public class ClienteChat extends JPanel{
         
         c.recibirMensajesServidor();
     }
-    */
+    
 }

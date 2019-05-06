@@ -9,8 +9,8 @@ import org.apache.log4j.PropertyConfigurator;
 
 public class ServidorChat {
 
-	public static int elPuerto = 1234;
-	public static String elHost = "localhost";
+	public static int elPuerto = 12345;
+	public static String elHost = "172.30.179.16";
 
 	public ServidorChat() {
 		// Carga el archivo de configuracion de log4J
@@ -46,5 +46,9 @@ public class ServidorChat {
 				log.error("Error al cerrar el servidor: " + ex.getMessage());
 			}
 		}
+	}
+	
+	public static void main(String[] args) {
+		ServidorChat sc = new ServidorChat();
 	}
 }
