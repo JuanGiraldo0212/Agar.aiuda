@@ -46,7 +46,7 @@ public class MusicPane extends JPanel implements ActionListener{
 		{
 			jbControl.setText("►");
 			jbControl.setActionCommand(START);
-			clientGUI.getClient().getAudioIndividual().setPlaying(false);
+			clientGUI.getClient().getAudioIndividual().setPlaying(true);
 		}
 		else if (e.equals(START)) 
 		{
@@ -58,7 +58,6 @@ public class MusicPane extends JPanel implements ActionListener{
 			} catch (IllegalThreadStateException e2) {
 				
 			}
-			
 
 		}
 		
