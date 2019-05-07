@@ -3,6 +3,7 @@ package Audio;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.io.File;
@@ -26,10 +27,13 @@ public class AudioServidor extends Thread {
 	private byte formatBuffer[] = new byte[60000];
 	private TargetDataLine targetDataLine;
 	private AudioInputStream audioStream;
-	private DatagramSocket socketMusica ;
-	private DatagramSocket socketFormato ;
+//	private DatagramSocket socketMusica ;
+//	private DatagramSocket socketFormato ;
 	private File file;
 	private String[]Canciones;
+	
+	private MulticastSocket socketMusicaSer;
+	private MulticastSocket socketFormatSer;
 	
 	@Override
 	public void run() {
@@ -38,8 +42,8 @@ public class AudioServidor extends Thread {
 
 	public AudioServidor(String song) {
 		try {
-			socketMusica = new DatagramSocket();
-			socketFormato = new DatagramSocket();
+//			socketMusica = new DatagramSocket();
+//			socketFormato = new DatagramSocket();
 			file= new File("./Musica/"+song.trim()+".wav");
 			audioStream= AudioSystem.getAudioInputStream(file);
 			setupAudio();
@@ -55,6 +59,13 @@ public class AudioServidor extends Thread {
 	private void broadcastAudio() {
 		try {		
 			InetAddress inetAddress = InetAddress.getByName(IP_DATOS);
+			
+			socketMusicaSer = new MulticastSocket(AUDIO_PORT);
+			socketFormatSer = new MulticastSocket(FORMAT_PORT);
+			
+			socketMusicaSer.joinGroup(inetAddress);
+			socketFormatSer.joinGroup(inetAddress);
+			
 			while (true) {
 				int count = audioStream.read(audioBuffer, 0, audioBuffer.length);
 				if (count > 0) {
@@ -63,10 +74,11 @@ public class AudioServidor extends Thread {
 					formatBuffer = infoFormat.getBytes();
 					
 					DatagramPacket packetFormat =  new DatagramPacket(formatBuffer, formatBuffer.length, inetAddress, FORMAT_PORT);
-					socketFormato.send(packetFormat);
+					socketFormatSer.send(packetFormat);
 					
 					DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, inetAddress, AUDIO_PORT);
-					socketMusica.send(packet);
+					socketMusicaSer.send(packet);
+					
 					sleep(AudioCliente.TIME_SLEEP);
 				}
 			}
