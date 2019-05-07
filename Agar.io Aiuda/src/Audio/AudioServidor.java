@@ -21,7 +21,7 @@ public class AudioServidor extends Thread {
 	public final static int AUDIO_PORT = 9786;
 	public final static int FORMAT_PORT = 9787;
 
-	public final static String IP_DATOS = "239.1.2.2";
+	public final static String IP_DATOS = "224.0.0.2";
 	
 	private byte audioBuffer[] = new byte[60000];
 	private byte formatBuffer[] = new byte[60000];
@@ -34,7 +34,7 @@ public class AudioServidor extends Thread {
 	
 	private MulticastSocket socketMusicaSer;
 	private MulticastSocket socketFormatSer;
-	
+	private InetAddress inetAddress;
 	@Override
 	public void run() {
 		broadcastAudio();
@@ -58,11 +58,11 @@ public class AudioServidor extends Thread {
 
 	private void broadcastAudio() {
 		try {		
-			InetAddress inetAddress = InetAddress.getByName(IP_DATOS);
+			inetAddress = InetAddress.getByName(IP_DATOS);
 			
 			socketMusicaSer = new MulticastSocket(AUDIO_PORT);
 			socketFormatSer = new MulticastSocket(FORMAT_PORT);
-			
+					
 			socketMusicaSer.joinGroup(inetAddress);
 			socketFormatSer.joinGroup(inetAddress);
 			
@@ -73,10 +73,10 @@ public class AudioServidor extends Thread {
 					String infoFormat = audioStream.getFormat().getSampleRate()+" "+audioStream.getFormat().getSampleSizeInBits()+" "+audioStream.getFormat().getChannels();
 					formatBuffer = infoFormat.getBytes();
 					
-					DatagramPacket packetFormat =  new DatagramPacket(formatBuffer, formatBuffer.length, inetAddress, FORMAT_PORT);
+					DatagramPacket packetFormat =  new DatagramPacket(formatBuffer, formatBuffer.length,FORMAT_PORT);
 					socketFormatSer.send(packetFormat);
 					
-					DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, inetAddress, AUDIO_PORT);
+					DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, AUDIO_PORT);
 					socketMusicaSer.send(packet);
 					
 					sleep(AudioCliente.TIME_SLEEP);

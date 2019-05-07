@@ -18,9 +18,12 @@ public class AudioCliente extends Thread {
 	
 	private AudioInputStream audioInputStream;
 	private SourceDataLine sourceDataLine;
+	private Boolean isPlaying;
+	
 	private MulticastSocket socketMusica;
 	private MulticastSocket socketFormat;
-	private Boolean isPlaying;
+	private InetAddress inetAddress;
+	
 	public AudioCliente() 
 	{
 		try 
@@ -29,10 +32,11 @@ public class AudioCliente extends Thread {
 			socketMusica = new MulticastSocket(AudioServidor.AUDIO_PORT);
 			socketFormat = new MulticastSocket(AudioServidor.FORMAT_PORT);
 			
-			InetAddress inetAddress = InetAddress.getByName(AudioServidor.IP_DATOS);
+			inetAddress = InetAddress.getByName(AudioServidor.IP_DATOS);
 			
 			socketMusica.joinGroup(inetAddress);
 			socketFormat.joinGroup(inetAddress);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
