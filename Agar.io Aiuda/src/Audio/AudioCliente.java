@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
+import java.net.SocketAddress;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -18,7 +20,7 @@ public class AudioCliente extends Thread {
 	
 	private AudioInputStream audioInputStream;
 	private SourceDataLine sourceDataLine;
-	private Boolean isPlaying;
+//	private Boolean isPlaying;
 	
 	private MulticastSocket socketMusica;
 	private MulticastSocket socketFormat;
@@ -26,20 +28,7 @@ public class AudioCliente extends Thread {
 	
 	public AudioCliente() 
 	{
-		try 
-		{
-			isPlaying = true;
-			socketMusica = new MulticastSocket(AudioServidor.AUDIO_PORT);
-			socketFormat = new MulticastSocket(AudioServidor.FORMAT_PORT);
-			
-			inetAddress = InetAddress.getByName(AudioServidor.IP_DATOS);
-			
-			socketMusica.joinGroup(inetAddress);
-			socketFormat.joinGroup(inetAddress);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
 	}
 
 	private void playAudio() {
@@ -59,12 +48,22 @@ public class AudioCliente extends Thread {
 	private void initiateAudio() {
 		try {
 			
+			socketMusica = new MulticastSocket(AudioServidor.AUDIO_PORT);
+			socketFormat = new MulticastSocket(AudioServidor.FORMAT_PORT);
+			
+			inetAddress = InetAddress.getByName(AudioServidor.IP_DATOS);
+			
+			socketMusica.joinGroup(inetAddress);
+			socketFormat.joinGroup(inetAddress);
+			
 			byte[] audioBuffer = new byte[60000];
 			byte[] formatBuffer = new byte[60000];
 			
 			System.out.println("preparando recepcion de musica");
+			
 			while (true) {
 				System.out.println("recibiendo musica");
+				
 				DatagramPacket packetFormat = new DatagramPacket(formatBuffer, formatBuffer.length);
 				socketFormat.receive(packetFormat);
 				

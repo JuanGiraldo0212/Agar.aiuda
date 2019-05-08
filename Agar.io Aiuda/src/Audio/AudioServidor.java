@@ -13,6 +13,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
+import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.TargetDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -25,16 +26,25 @@ public class AudioServidor extends Thread {
 	
 	private byte audioBuffer[] = new byte[60000];
 	private byte formatBuffer[] = new byte[60000];
-	private TargetDataLine targetDataLine;
+	
 	private AudioInputStream audioStream;
+	private SourceDataLine sLine;
+	
+	private TargetDataLine targetDataLine;
 //	private DatagramSocket socketMusica ;
 //	private DatagramSocket socketFormato ;
 	private File file;
 	private String[]Canciones;
 	
-	private MulticastSocket socketMusicaSer;
-	private MulticastSocket socketFormatSer;
+//	private MulticastSocket socketMusicaSer;
+//	private MulticastSocket socketFormatSer;
 	private InetAddress inetAddress;
+	
+	private DatagramSocket server;
+	
+	private DatagramPacket packetFormat;
+	private DatagramPacket packetAudio;
+	
 	@Override
 	public void run() {
 		broadcastAudio();
@@ -46,6 +56,7 @@ public class AudioServidor extends Thread {
 //			socketFormato = new DatagramSocket();
 			file= new File("./Musica/"+song.trim()+".wav");
 			audioStream= AudioSystem.getAudioInputStream(file);
+			server = new DatagramSocket();
 			setupAudio();
 		} catch (SocketException e) {
 			e.printStackTrace();
@@ -60,11 +71,15 @@ public class AudioServidor extends Thread {
 		try {		
 			inetAddress = InetAddress.getByName(IP_DATOS);
 			
-			socketMusicaSer = new MulticastSocket(AUDIO_PORT);
-			socketFormatSer = new MulticastSocket(FORMAT_PORT);
-					
-			socketMusicaSer.joinGroup(inetAddress);
-			socketFormatSer.joinGroup(inetAddress);
+//			socketMusicaSer = new MulticastSocket(AUDIO_PORT);
+//			socketFormatSer = new MulticastSocket(FORMAT_PORT);
+//			
+//			socketMusicaSer.setTimeToLive(255);
+//			socketFormatSer.setTimeToLive(255);
+//			
+//			socketMusicaSer.joinGroup(inetAddress);
+//			socketFormatSer.joinGroup(inetAddress);
+			
 			
 			while (true) {
 				int count = audioStream.read(audioBuffer, 0, audioBuffer.length);
@@ -73,11 +88,13 @@ public class AudioServidor extends Thread {
 					String infoFormat = audioStream.getFormat().getSampleRate()+" "+audioStream.getFormat().getSampleSizeInBits()+" "+audioStream.getFormat().getChannels();
 					formatBuffer = infoFormat.getBytes();
 					
-					DatagramPacket packetFormat =  new DatagramPacket(formatBuffer, formatBuffer.length,FORMAT_PORT);
-					socketFormatSer.send(packetFormat);
+					packetFormat =  new DatagramPacket(formatBuffer, formatBuffer.length, inetAddress, FORMAT_PORT);
+//					socketFormatSer.send(packetFormat);
+					server.send(packetFormat);
 					
-					DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, AUDIO_PORT);
-					socketMusicaSer.send(packet);
+					packetAudio = new DatagramPacket(audioBuffer, audioBuffer.length, inetAddress, AUDIO_PORT);
+//					socketMusicaSer.send(packet);
+					server.send(packetAudio);
 					
 					sleep(AudioCliente.TIME_SLEEP);
 				}
@@ -91,9 +108,11 @@ public class AudioServidor extends Thread {
 		try {
 			AudioFormat audioFormat =audioStream.getFormat();
 			DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
+			
 			targetDataLine = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
 			targetDataLine.open(audioFormat);
 			targetDataLine.start();
+			
 			System.out.println("LISTO PARA MUSICA MULTICAST");
 		} catch (Exception ex) {
 			 System.out.println(ex);
@@ -111,7 +130,7 @@ public class AudioServidor extends Thread {
 	}
 
 	public static void main(String[] args) {
-		AudioServidor as = new AudioServidor("RISE");
+		AudioServidor as = new AudioServidor("pumped");
 		as.start();
 		
 	}
